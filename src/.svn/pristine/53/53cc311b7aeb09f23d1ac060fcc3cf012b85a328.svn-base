@@ -1,0 +1,18 @@
+<!-- <ul class="head-title">
+    <li>稅</li>
+    <li>季</li>
+    <li>貸</li>
+    <li class="last-li">款</li>
+    <div style="clear: both"></div>
+</ul> -->
+<div class="head-title">
+    <!-- <img src="assets/imgs/land-header.jpg" class="header-pic" alt=""> -->
+    <span>私人貸款</span>
+</div>
+<div class="step-bar" *ngIf="isStep">
+    <label *ngFor="let item of stepNo; let idx = index">
+        <span [ngClass]="{'finish': idx < step, 'current': idx == step, 'half': isHalf}" (click)="goBack(idx)">{{item}}</span>
+        <div class="step-line" [ngClass]="{'finish': idx < step}"></div>
+    </label>
+    <span [ngClass]="{'finish': finish}"><ion-icon name="checkmark" class="finish-mark"></ion-icon></span>
+</div>

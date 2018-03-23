@@ -1,0 +1,316 @@
+import { Component, ViewChild, ChangeDetectorRef, ElementRef } from '@angular/core';
+import { NavController, LoadingController, Content,Select } from 'ionic-angular';
+
+import { Page5 } from '../page5/page5';
+import { PdfPage } from '../pdf/pdf';
+import { ErrorPage } from '../error/error';
+import { HttpService } from '../http-service/http.service';
+import { ValidaService } from '../http-service/valid.service';
+import { CommonService } from '../http-service/common.service';
+
+import { fadeIn } from '../http-service/animation';
+
+declare let customConfig: any;
+
+@Component({
+  selector: 'page-page4',
+  templateUrl: 'page4.html',
+  animations: [fadeIn]
+})
+export class Page4 {
+  @ViewChild(Content) content: Content;
+  @ViewChild('occupationType') occupationType: any;
+  @ViewChild('companyEnName') companyEnName: any;
+  @ViewChild('companyFlat') companyFlat: any;
+  @ViewChild('companyFloor') companyFloor: any;
+  @ViewChild('companyBlock') companyBlock: any;
+  @ViewChild('companyGarden') companyGarden: any;
+  @ViewChild('companyStreet') companyStreet: any;
+  @ViewChild('companyArea') companyArea: any;
+  @ViewChild('industryNature') industryNature: any;
+  @ViewChild('industry') industry: any;
+  @ViewChild('occupation') occupation: any;
+  @ViewChild('position') position: any;
+  @ViewChild('income') income: any;
+  @ViewChild('tenureYear') tenureYear: any;
+  @ViewChild('formerCompanyEnName') formerCompanyEnName: any;
+  @ViewChild('companyMobileNo') companyMobileNo: any;
+  @ViewChild('formerTenureYear') formerTenureYear: any;
+  @ViewChild('chooseBankCode') chooseBankCode:Select;
+  @ViewChild('comAddress') comAddress: any;
+  private isAgreeArrange: boolean = false;
+  private bankNo: string;
+  private accountNo: string;
+  private bankName: string;
+  private bankNameEn: string;
+  private bankAry = [];
+  private occupationTypeItems = [];
+  private industryNatureItems = [];
+  private otherIndustry: boolean = false;
+  private occupationItems = [];
+  private otherPosition: boolean = false;
+  private comAddressItems = [{"nameTC": "住宅地址","nameEN": "Residential Address","value": "Residential Address"},
+  {"nameTC": "公司地址","nameEN": "Office Address","value": "Office Address"}];
+  private companyAreaList = [];
+  private yearList = [];
+  private preYearList = [];
+  private servingYear: number;
+  private errObj: any= {};
+  private positionList: any = [];
+  private hideOccupation: boolean = true;
+  private firstIn: boolean = true;
+  showMobile: boolean = false;
+  constructor(
+    public navCtrl: NavController,
+    private cdRef: ChangeDetectorRef,
+    private eleRef: ElementRef,
+    private httpService: HttpService,
+    private validaService: ValidaService,
+    public loading: LoadingController,
+    public commonService: CommonService,
+  ) {}
+
+  ionViewWillLoad() {
+    this.companyAreaList = this.commonService.areaService;
+    let loading = this.commonService.loadingModel('');loading.present();
+    Promise.all([
+      this.httpService.httpRequest('getpage4selectservice'),
+      this.httpService.httpRequest('getbankcodeservice'),
+      this.httpService.httpRequest('updateinfoservice', this.httpService.sendData)
+    ]).then(([select, bankAry, update]) => {
+      loading.dismiss().then(() => {
+        if (select.status == 'success' && bankAry.status == 'success' && update.status == 'success') {
+          let selectInfo = select.resultInfo;
+          this.occupationTypeItems = selectInfo.occupationTypeItems;
+          this.industryNatureItems = selectInfo.industryNatureItems;
+          this.positionList = selectInfo.positionList;
+          this.yearList = this.commonService.getYearList(30, 11);
+          this.preYearList = this.commonService.getYearList(30, 11, true);
+          this.bankAry = bankAry.bankCodeList;
+          let dataInfo = update.resultInfo;
+          this.occupationType.inputValue = dataInfo.occupationType;
+          if (this.occupationType.inputValue && this.occupationType.inputValue != this.occupationTypeItems[0].value && this.occupationType.inputValue != this.occupationTypeItems[1].value) {
+            this.comAddress.inputValue = this.comAddressItems[0].value;
+            this.httpService.isHomeWork = true;
+          } else {
+            this.companyEnName.inputValue = dataInfo.companyEnName;
+            this.companyFlat.inputValue = dataInfo.companyFlat;
+            this.companyFloor.inputValue = dataInfo.companyFloor;
+            this.companyBlock.inputValue = dataInfo.companyBlock;
+            this.companyGarden.inputValue = dataInfo.companyGarden;
+            this.companyStreet.inputValue = dataInfo.companyStreet;
+            this.companyArea.inputValue = dataInfo.companyArea;
+            this.comAddress.inputValue = dataInfo.comAddress;
+            this.industryNature.inputValue = dataInfo.industryNature;
+            if(this.industryNature.inputValue) {
+              this.occupationItems = selectInfo.positionList[dataInfo.industryNature];
+            }
+            if(this.industryNature.inputValue == this.industryNatureItems[this.industryNatureItems.length - 1].value) {
+              this.industry.inputValue = dataInfo.otherIndustry;
+            }
+            if (this.industryNature.inputValue) {
+              this.hideOccupation = false;
+              this.occupation.inputValue = dataInfo.occupation;
+            }
+            if(this.industryNature.inputValue && this.occupation.inputValue == this.occupationItems[this.occupationItems.length - 1].value) {
+              this.position.inputValue = dataInfo.otherOccupation;
+            }
+            !this.comAddress.inputValue && (this.comAddress.inputValue = this.comAddressItems[0].value);
+            this.income.inputValue = dataInfo.income;
+            this.tenureYear.inputValue = dataInfo.tenureYear;
+            this.tenureYear.inputValue && this.servingYearChange();
+            this.companyMobileNo.inputValue = dataInfo.companyMobileNo;
+            if (this.companyMobileNo.inputValue) {
+              this.showMobile = true;
+            }
+            this.formerCompanyEnName.inputValue = dataInfo.formerCompanyEnName;
+            this.formerTenureYear.inputValue = dataInfo.formerTenureYear;
+          }
+          this.bankNo = dataInfo.bankNo;
+          this.accountNo = dataInfo.accountNo;
+          this.getBankByCode();
+        }else {
+          this.toErrorPage((update.message || select.message), loading);
+        }
+      })
+    }).catch((res) => {
+      this.toErrorPage(res.statusText, loading);
+    })
+  }
+
+  typeChange() {
+    if (this.occupationType.inputValue == this.occupationTypeItems[0].value || this.occupationType.inputValue == this.occupationTypeItems[1].value) {
+      this.comAddress.inputValue = this.comAddressItems[1].value;
+      this.httpService.isHomeWork = false;
+    } else {
+      this.comAddress.inputValue = this.comAddressItems[0].value;
+      this.httpService.isHomeWork = true;
+    }
+  }
+
+  getOccupationItems(obj) {
+    return obj['occupationItems_' + obj.value];
+  }
+
+  industryChange() {
+    this.hideOccupation = (this.industryNature.inputValue == '' || this.industryNature.inputValue == undefined);
+    this.occupationItems = this.positionList[this.industryNature.inputValue];
+    if (this.industryNature.inputValue == this.industryNatureItems[this.industryNatureItems.length - 1].value) {
+      this.otherIndustry = true;
+    } else {
+      this.industry.inputValue = '';
+      this.otherIndustry = false;
+    }
+    !this.firstIn && (this.occupation.inputValue = '');
+  }
+
+  positionChange() {
+    let lastValue = this.occupationItems[this.occupationItems.length - 1];
+    if (this.occupation.inputValue == lastValue.value && lastValue.nameTC == '其他，請註明') {
+      this.otherPosition = true;
+    } else {
+      this.position.inputValue = '';
+      this.otherPosition = false;
+    }
+  }
+
+  servingYearChange() {
+    let getTime = this.tenureYear.inputValue.split(' ');
+    this.servingYear = getTime ? (getTime[0] * 12 + Number(getTime[1].split('-')[1])) : 0;
+  }
+
+  nextStep() {
+    this.errObj = {};
+    this.cdRef.markForCheck();
+    this.cdRef.detectChanges();
+    this.errObj.occupationType = this.validaService.isEmpty(this.occupationType.inputValue, '請選擇工作類型');
+    if (!this.httpService.isHomeWork) {
+      this.errObj.companyEnName = this.validaService.isAreaInput(this.companyEnName.inputValue, '受僱公司英文名稱填寫不正確', '請填寫受僱公司英文名稱');
+      this.errObj.companyFlat = this.validaService.isEngRoom(this.companyFlat.inputValue, '室填寫不正確');
+      this.errObj.companyFloor = this.validaService.isEngRoom(this.companyFloor.inputValue, '樓填寫不正確');
+      this.errObj.companyBlock = this.validaService.isEngRoom(this.companyBlock.inputValue, '座填寫不正確');
+      if (!this.companyFlat.inputValue && !this.companyFloor.inputValue && !this.companyBlock.inputValue) {
+        this.errObj.companyFlat = '請填寫室';
+        this.errObj.companyFloor = '請填寫樓';
+        this.errObj.companyBlock = '請填寫座';
+      }
+      this.errObj.companyGarden = this.validaService.isEmpty(this.companyGarden.inputValue, '請填寫大廈/屋苑');
+      this.errObj.companyStreet = this.validaService.isEmpty(this.companyStreet.inputValue, '請填寫街道');
+      this.errObj.companyArea = this.validaService.isEmpty(this.companyArea.inputValue, '請選擇地區');
+      this.errObj.industryNature = this.validaService.isEmpty(this.industryNature.inputValue, '請選擇行業性質');
+      if (this.industryNature.inputValue == this.industryNatureItems[this.industryNatureItems.length - 1].value) {
+        this.errObj.industry = this.validaService.isAreaInput(this.industry.inputValue, '行業性質填寫不正確', '請填寫行業性質')
+      }
+      !this.hideOccupation && (this.errObj.occupation = this.validaService.isEmpty(this.occupation.inputValue, '請選擇職位'));
+      if (this.industryNature.inputValue && this.occupation.inputValue == this.occupationItems[this.occupationItems.length - 1].value) {
+        this.errObj.position = this.validaService.isAreaInput(this.position.inputValue, '職位填寫不正確', '請填寫職位')
+      }
+      this.errObj.income = this.validaService.isNumber(this.income.inputValue, '每月收入填寫不正確', '請填寫每月收入');
+      this.errObj.tenureYear = this.validaService.isEmpty(this.tenureYear.inputValue,'請選擇任職年期');
+      if (this.servingYear < 3) {
+        this.errObj.formerCompanyEnName = this.validaService.isAreaInput(this.formerCompanyEnName.inputValue, '前受僱公司英文名稱填寫不正確', '請填寫前受僱公司英文名稱');
+      }
+      this.errObj.companyMobileNo = this.validaService.isMobile(this.companyMobileNo.inputValue, '請填寫公司電話號碼', '號碼不正確，且不小於8位');
+      if (this.formerTenureYear.inputValue) {
+        this.errObj.formerTenureYear = this.validaService.isEmpty(this.formerTenureYear.inputValue, '請選擇任職年期');
+      }
+    }
+    this.errObj.comAddress = this.validaService.isEmpty(this.comAddress.inputValue, '請選擇通訊地址');
+    this.errObj.accountNo = this.validaService.isAccountNum(this.accountNo,'請填寫帳戶號碼','帳戶號碼填寫不正確');
+    this.errObj.bankNo = this.validaService.isBankCode(this.bankNo,'請填寫銀行編號','銀行編號填寫不正確', this.bankAry);
+    this.errObj.isAgreeArrange = this.validaService.isEmpty(this.isAgreeArrange, '請按空格以確認你已參閱、明白及同意有關條款及細則');
+    let isRightToNext = this.commonService.scrollTo(this.content,this.errObj);
+    if (isRightToNext) {
+      if (this.httpService.isHomeWork) {
+        this.companyEnName.inputValue = '';
+        this.companyFlat.inputValue = '',
+        this.companyFloor.inputValue = '',
+        this.companyBlock.inputValue = '',
+        this.companyGarden.inputValue = '',
+        this.companyStreet.inputValue = '',
+        this.companyArea.inputValue = '',
+        // this.comAddress.inputValue = '',
+        this.companyEnName.inputValue = '';
+        this.industryNature.inputValue = '';
+        this.industry.inputValue = '';
+        this.occupation.inputValue = '';
+        this.position.inputValue = '';
+        this.income.inputValue =  '';
+        this.tenureYear.inputValue = '';
+        this.companyMobileNo.inputValue = '';
+        this.formerCompanyEnName.inputValue = '';
+        this.formerTenureYear.inputValue = '';
+      }
+      if (this.servingYear > 3) {
+        this.formerTenureYear.inputValue = '';
+        this.formerCompanyEnName.inputValue = '';
+      }
+      this.httpService.sendData = {
+        "id": this.commonService.userId,
+        "occupationType": this.occupationType.inputValue,
+        "companyFlat": this.companyFlat.inputValue,
+        "companyFloor": this.companyFloor.inputValue,
+        "companyBlock": this.companyBlock.inputValue,
+        "companyGarden": this.companyGarden.inputValue,
+        "companyStreet": this.companyStreet.inputValue,
+        "companyArea": this.companyArea.inputValue,
+        "comAddress": this.comAddress.inputValue,
+        "bankNo": this.bankNo,
+        "accountNo": this.accountNo,
+        "bankName": this.bankNameEn,
+        "companyEnName": this.companyEnName.inputValue,
+        "industryNature": this.industryNature.inputValue,
+        "otherIndustry": this.otherIndustry ? this.industry.inputValue : '',
+        "occupation": this.occupation.inputValue,
+        "otherOccupation": this.otherPosition ? this.position.inputValue : '',
+        "income": this.income.inputValue,
+        "tenureYear": this.tenureYear.inputValue,
+        "companyMobileNo": this.companyMobileNo.inputValue,
+        "formerCompanyEnName": this.formerCompanyEnName.inputValue,
+        "formerTenureYear": this.formerTenureYear.inputValue
+      };
+
+      this.navCtrl.push(Page5);
+
+    }
+  }
+
+  getBankName() {
+    let msg = `<table><thead><tr><td width="65">銀行編號</td><td>銀行名稱</td></tr></thead><tbody>`;
+    this.bankAry.forEach(element => {
+      msg += "<tr><td>" + element.key + "</td><td>" + element.name_cn + "</td></tr>";
+    });
+    msg += `</tbody></table>`;
+    this.commonService.alertModel('銀行編號', msg, '關閉', null, 'alertModal');
+  }
+
+  getBankByCode() {
+    this.bankName = '';
+    if (!this.bankNo || this.bankNo.length < 3) {
+      return;
+    }
+    this.bankAry.forEach(item => {
+      if (item.key == this.bankNo) {
+        this.bankName = item.name_cn;
+        this.bankNameEn = item.name_en;
+        return;
+      }
+    });
+  }
+
+  toErrorPage(errMsg, loader?: any) {
+    loader.dismiss().then(()=> {
+        this.navCtrl.setRoot(ErrorPage, {
+            errMsg: errMsg
+        });
+    });
+  }
+
+  toPDF(url) {
+    let src = customConfig.pdfUrl[url.toString()];
+    this.navCtrl.push(PdfPage, {
+      pdfUrl: src
+    });
+  }
+
+}

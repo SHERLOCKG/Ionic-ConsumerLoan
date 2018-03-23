@@ -1,0 +1,101 @@
+<ion-header *ngIf="commonService.isWebset">
+    <ion-navbar class="bea-header"></ion-navbar>
+</ion-header>
+
+<ion-content>
+    <header-step [step]=2></header-step>
+        
+    <ion-list>
+        <ion-list-header>
+            個人資料
+        </ion-list-header>
+        <form-item #gender [name]="personInfoTitle.gender" [opItem]="genderOpItem" [errMsg]="errObj.gender" id="gender"></form-item>
+        <form-item #surName [name]="personInfoTitle.surName" [errMsg]="errObj.surName" [maxLen]=20 id="surName" [keyFilter]="validaService.regExp.forLetter"></form-item>
+        <form-item #name [name]="personInfoTitle.name" [errMsg]="errObj.name" [maxLen]=20 id="name" [keyFilter]="validaService.regExp.forLetter"></form-item>
+         <div class="form-item" id="fullBirthday">
+            <div class="show-err" *ngIf="errObj.fullBirthday">{{errObj.fullBirthday}}</div>
+            <ion-item [ngClass]="{'has-err':errObj.fullBirthday}">
+                <ion-label floating>出生日期：</ion-label>
+                <ion-datetime displayFormat="DD MMM YYYY" cancelText="取消" doneText="確定" [max]="maxYear" pickerFormat="DD/MMM/YYYY" [(ngModel)]="personInfo.fullBirthday" (click)="errObj.fullBirthday = ''"></ion-datetime>
+            </ion-item>
+        </div>
+        <div class="form-item">
+            <div class="show-err" *ngIf="errObj.idCard" @fadeIn (click)="errObj.idCard = ''">{{errObj.idCard}}</div>
+            <ion-item class="idcard-box" [ngClass]="{'error-border':errObj.idCardPref}" id="idCard">
+                <ion-label floating>香港身份證號碼：<span *ngIf="errObj.idCardPref" class="err-hint" style="display:block;">{{errObj.idCardPref}}</span></ion-label>
+                <ion-input [(ngModel)]="personInfo.idCardPref" maxLength="8" (ionFocus)="errObj.idCard = ''"></ion-input>
+            </ion-item>
+            <ion-item class="lefticon" style="width:3%;text-align:center;display: inline-block;">
+                <span>(</span>
+            </ion-item>
+            <ion-item class="addStyle" [ngClass]="{'error-border':errObj.idCardPref}">
+                <ion-label floating  style="opacity: 0;">最後一位: <span *ngIf="errObj.idCardPref" class="err-hint" style="display:block;">{{errObj.idCardPref}}</span></ion-label>
+                <ion-input [(ngModel)]="personInfo.idCardSuf" maxLength="1" (ionFocus)="errObj.idCard = ''"></ion-input>
+            </ion-item>
+            <ion-item class="lefticon" style="width:3%;text-align:center;display: inline-block;border: 0px;">
+                <span>)</span>
+            </ion-item>
+        </div>
+        <form-item #otherType *ngIf="!httpService.isHK" [name]="personInfoTitle.otherType" [opItem]="otherTypeOpItem" [errMsg]="errObj.otherType" [maxLen]=18 id="otherType" [keyFilter]="validaService.regExp.forLetter"></form-item> 
+        <form-item #otherCountry *ngIf="!httpService.isHK" [name]="personInfoTitle.otherCountry" [opItem]="nationalityOpItem" [errMsg]="errObj.otherCountry" [maxLen]=18 id="otherCountry" [keyFilter]="validaService.regExp.forLetter"></form-item> 
+        <form-item #otherNum *ngIf="!httpService.isHK" [name]="personInfoTitle.otherNum" [errMsg]="errObj.otherNum" [maxLen]=18 id="otherNum" [keyFilter]="validaService.regExp.forNum"></form-item> 
+        <!--<form-item #mobileNo [name]="personInfoTitle.mobileNo" [errMsg]="errObj.mobileNo" [maxLen]=8 id="mobileNo"></form-item>-->
+        <form-item #houseMobileNo [inputType]="'tel'" [name]="personInfoTitle.houseMobileNo" [errMsg]="errObj.houseMobileNo" [maxLen]=8 id="houseMobileNo"></form-item>
+        <form-item #nationality [name]="personInfoTitle.nationality" [opItem]="nationalityOpItem" [errMsg]="errObj.nationality" id="nationality"></form-item>
+        <form-item #marriage [name]="personInfoTitle.marriage" [opItem]="marriageOpItem" [errMsg]="errObj.marriage" id="marriage"></form-item>
+        <form-item #education [name]="personInfoTitle.education" [opItem]="educationOpItem" [errMsg]="errObj.education" id="education"></form-item>
+        <form-item #liveStatus [name]="personInfoTitle.liveStatus" [opItem]="liveStatusOpItem" [errMsg]="errObj.liveStatus" id="liveStatus"></form-item>
+        <div [style.display] = "liveStatus.inputValue == 'Rented' || liveStatus.inputValue == 'Mortgaged' ? 'block' : 'none'">
+            <form-item #liveCost [inputType]="'tel'" [name]="liveStatus.inputValue == 'Rented'? personInfoTitle.liveCost1 : personInfoTitle.liveCost2" [errMsg]="errObj.liveCost" [maxLen]=8 id="liveCost"></form-item>
+        </div>
+    </ion-list>
+
+    <ion-list>
+        <ion-list-header class="small-space">
+            住宅英文地址（郵政信箱及海外地址恕不接受）
+        </ion-list-header>
+        <form-item #flat [name]="personInfoTitle.flat" [errMsg]="errObj.flat" class="cut-line" [maxLen]=10 id="flat" [keyFilter]="validaService.regExp.forRoom"></form-item>
+        <form-item #floor [name]="personInfoTitle.floor" [errMsg]="errObj.floor" class="cut-line" [maxLen]=10 id="floor" [keyFilter]="validaService.regExp.forRoom"></form-item>
+        <form-item #block [name]="personInfoTitle.block" [errMsg]="errObj.block" class="cut-line" [maxLen]=10 id="block" [keyFilter]="validaService.regExp.forRoom"></form-item>
+        <form-item #garden [name]="personInfoTitle.garden" [errMsg]="errObj.garden" [maxLen]=35 id="garden" [keyFilter]="validaService.regExp.forArea"></form-item>
+        <form-item #street [name]="personInfoTitle.street" [errMsg]="errObj.street" [maxLen]=35 id="street" [keyFilter]="validaService.regExp.forArea"></form-item>
+
+        <div class="form-item" id="area">
+            <div class="show-err" style="bottom: 40px;" *ngIf="errObj.area" (click)="errObj.area = ''" @fadeIn>{{errObj.area}}</div>
+                <ion-item #area style="border-bottom:1px solid #c8c7cc" class="area-border" id="area">
+                    <ion-label>地區：</ion-label>
+                    <ion-multi-picker
+                        (click)="errObj.area=''"
+                        item-content
+                        id="area"
+                        [(ngModel)]="area.inputValue"
+                        [multiPickerColumns]="areaList"
+                        [cancelText]="'取消'"
+                        [doneText]="'確定'"
+                    >
+                    </ion-multi-picker>
+                </ion-item>
+        </div>
+        
+        <div class="form-item" id="liveYear">
+            <div class="show-err" style="bottom: 40px;" *ngIf="errObj.liveYear" (click)="errObj.liveYear = ''" @fadeIn>{{errObj.liveYear}}</div>
+                <ion-item #liveYear style="border-bottom:1px solid #c8c7cc" class="area-border" id="liveYear">
+                    <ion-label>居住年期：</ion-label>
+                    <ion-multi-picker
+                        (click)="errObj.liveYear=''"
+                        item-content
+                        id="liveYear"
+                        [(ngModel)]="liveYear.inputValue"
+                        [multiPickerColumns]="liveYearList"
+                        [cancelText]="'取消'"
+                        [doneText]="'確定'"
+                    >
+                    </ion-multi-picker>
+                </ion-item>
+        </div>
+    </ion-list>
+
+    <div>
+        <button ion-button class="my-btn" (click)="saveAnext()">儲存及下一步</button>
+    </div>
+</ion-content>

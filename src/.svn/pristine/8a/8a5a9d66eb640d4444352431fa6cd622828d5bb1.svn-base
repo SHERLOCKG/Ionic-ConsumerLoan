@@ -1,0 +1,435 @@
+import { Component, ViewChild, ChangeDetectorRef,ElementRef } from '@angular/core';
+import { NavController, Content } from 'ionic-angular';
+
+import { Page2 } from '../page2/page2';
+import { ErrorPage } from '../error/error';
+import { HttpService } from '../http-service/http.service';
+import { ValidaService } from '../http-service/valid.service';
+import { CommonService } from '../http-service/common.service';
+import { fadeIn } from '../http-service/animation';
+
+declare let customConfig: any;
+
+@Component({
+    selector: 'page-home',
+    templateUrl: 'home.html',
+    animations: [fadeIn]
+})
+export class HomePage {
+    @ViewChild(Content) content: Content;
+    @ViewChild('loanPur') purpose: any;
+    @ViewChild('phone') phone: any;
+    @ViewChild('email') email: any;
+    // canChange:boolean;
+    private errObj: any = {
+        loan: '',
+        phone: '',
+        email: '',
+        isRight: '',
+        homeIsAgree: '',
+    };
+    phoneTitle: string = '手提電話';
+    emailTitle: string = '電郵地址';
+    loanPurposeTitle: string = '貸款目的';
+    opItems = [{}];
+    amountRange = {
+        min:5000,
+        max:1200000,
+        step: 1000
+    };
+    refundRange = {
+        max: 60,
+        min: 12,
+        // step: 12,
+    };
+    private loan = {
+        refundTime: 1,
+        currVal: 5000,
+        mir: 0,
+        apr: 0,
+        fee: 0,
+        rateList: [],
+        baseRateList: []
+    };
+    private oldTime: any;
+    timer: any;
+    isContinue:boolean = false;
+    isSame:boolean = true;
+
+    private isBlur: boolean = true;
+    private starMobileNo = '';
+    private starEmail = '';
+    showMobilNum:string;
+    hasRefund:boolean = false;
+    showMobile = true;
+    private homeIsAgree: boolean = false;
+    constructor(
+        private navCtrl: NavController,
+        private cdRef: ChangeDetectorRef,
+        private elRef: ElementRef,
+        private httpService: HttpService,
+        private validService: ValidaService,
+        private commonService: CommonService
+    ) {}
+    ionViewWillEnter(){
+        // this.canChange = this.commonService.canChange;
+        let isWeb = this.commonService.getUrlParams('webview');
+        this.commonService.isWebset = isWeb == 'Y' ? false : true;
+    }
+
+    ionViewWillLoad(){
+        let loading = this.commonService.loadingModel(''); loading.present();
+        let iToken = localStorage.getItem("iToken") || '';
+        Promise.all([
+            this.httpService.httpRequest('getrateservice'),
+            this.httpService.httpRequest('gethomeservice'),
+            iToken && this.httpService.httpRequest('checkcookieservice', {token: iToken, productCode: 'CLN'})
+        ]).then(([rate, home, cookie])=> {
+            loading.dismiss().then(()=>{
+                if (rate.status == 'success' &&  home.status == 'success') {
+                    this.loan.rateList = rate.resultInfo;
+                    this.setBaseRate(this.loan.rateList);
+                    this.opItems = home.resultInfo.loanPurpose;
+                    this.purpose.inputValue =this.opItems[7]['value'];
+                    if (cookie && cookie.status == 'success') {
+                        let data = cookie.resultInfo;
+                        this.phone.inputValue = data.mobileNo;
+                        // if (this.phone.inputValue) {
+                        //     this.showMobile = true;
+                        // }
+                        this.starMobileNo = data.mobileNo;
+                        this.email.inputValue = data.email;
+                        this.starEmail = data.email;
+                        this.loan.currVal = data.loanAmount;
+                        this.loan.baseRateList.forEach((item, idx) => {
+                            if (item.key == data.refundTime) {
+                                this.loan.refundTime = idx + 1;
+                                return ;
+                            }
+                        });
+                        this.purpose.inputValue = data.loanPurpose;
+                        this.showMobilNum = data.mobileNo;
+
+                        data.continue && this.showContinueAlert();
+                    }else if(cookie.status == 'fail') {
+                        this.toErrorPage(cookie.message, loading);
+                    }
+                    this.changeRate();
+                }else {
+                    this.toErrorPage(rate.message || home.message);
+                }
+            });
+        }).catch(res=> {
+            this.toErrorPage(res.statusText, loading);
+        });
+    }
+
+    setBaseRate(rateList) {
+        let minValue = rateList[0], maxValue = rateList[rateList.length - 1];
+        this.amountRange.min = minValue['from'];
+        this.amountRange.max = maxValue['to'];
+        
+        rateList = rateList.filter(item => item['from'] == rateList[0]['from'] && item['to'] == rateList[0]['to']);
+        this.loan.baseRateList = rateList;
+        
+        this.refundRange = {
+            max: rateList.length,
+            min: 1
+        };
+        this.refundRange['step'] = 1;
+        setTimeout(()=> {
+            this.cdRef.markForCheck();
+            this.cdRef.detectChanges();
+        }, 0)
+    }
+
+    changeRate() {
+        this.elRef.nativeElement.querySelector('#amount').blur();
+        // this.loan.currVal = this.loan.currValW + 10000 - this.loan.currValK;
+        this.loan.rateList.forEach(elem => {
+            if (elem.key.toString() == this.loan.baseRateList[this.loan.refundTime - 1].key && elem.from <= this.loan.currVal && elem.to >= this.loan.currVal) {
+                this.loan.apr = elem.apr;
+                this.loan.mir = elem.mir;
+                this.loan.fee = elem.fee;
+                return;
+            }
+        });
+        this.toFormat();
+
+        if (!this.hasRefund) {
+            setTimeout(()=> {
+                const ele = document.getElementsByClassName('range-refund')[0].lastChild['lastElementChild'];
+                let label = document.createElement('label');
+                label.className = 'refund-tag';
+                ele.appendChild(label); 
+                this.hasRefund = true;
+                document.getElementsByClassName('refund-tag')[0].innerHTML = this.loan.baseRateList[this.loan.refundTime - 1].key + '個月';
+            }, 10);
+        }else {
+            document.getElementsByClassName('refund-tag')[0].innerHTML = this.loan.baseRateList[this.loan.refundTime - 1].key + '個月';
+        }   
+    }
+
+    saveAnext() {
+        this.errObj = {};
+        this.cdRef.markForCheck();
+        this.cdRef.detectChanges();
+        this.errObj.homeIsAgree = this.validService.isEmpty(this.homeIsAgree, '請按空格以確認你已參閱、明白及同意各項重要聲明');
+        this.errObj.loan = this.validService.isEmpty(this.purpose.inputValue, '請選擇貸款目的');
+        if ((this.phone.inputValue && this.phone.inputValue != this.starMobileNo) || !this.phone.inputValue){
+            this.errObj.phone = this.validService.isMobile(this.phone.inputValue,'請填寫香港手提電話號碼','號碼不正確，且不小於8位');
+        }
+        if ((this.email.inputValue && this.email.inputValue != this.starEmail) || !this.email.inputValue){
+            this.errObj.email = this.validService.isEmail(this.email.inputValue,'請填寫電郵地址','電郵地址填寫不正確', '電郵地址填寫不得超过40个字符', 40);
+        }
+        let isRightToNext = this.commonService.scrollTo(this.content,this.errObj);
+        isRightToNext && (this.commonService.canChange ? this.saveBaseInfo() : this.updateBaseInfo());
+    }
+
+    resetSendData() {
+        let channelCode = this.commonService.getUrlParams('c'),
+            branchCode = this.commonService.getUrlParams('branchCode'),
+            sellerId = this.commonService.getUrlParams('sellerId');
+        this.httpService.sendData = {
+            "loanPurpose": this.purpose.inputValue,
+            "loanAmount": this.loan.currVal.toString(),
+            "refundTime": this.loan.baseRateList[this.loan.refundTime - 1].key + '',
+            "mir": this.loan.mir,
+            "apr": this.loan.apr,
+            "monthPay": parseFloat(this.commonService.setMonthPay(this.loan.currVal, this.loan.mir, this.loan.fee, this.loan.baseRateList[this.loan.refundTime - 1].key).split(" ")[1]),
+            "mobileNo": this.phone.inputValue,
+            "mobileFront": '852',
+            "email": this.email.inputValue,
+            "productCode": 'CLN',
+            "lang": 'Tc',
+            "channelCode": channelCode,
+            "branchCode": branchCode,
+            "sellerId": sellerId
+        };
+    }
+
+    saveBaseInfo(){
+        this.resetSendData();
+        let loading = this.commonService.loadingModel(''); loading.present();
+        this.httpService.httpRequest('applyservice', this.httpService.sendData).then(res=>{
+            loading.dismiss().then(()=>{
+                if(res.status == 'success'){
+                    this.showMobilNum = res.resultInfo.mobileNo;
+                    this.isContinue && (this.isContinue = res.resultInfo.continue);     //防止点击了重新申请，但是手动关闭验证OTP模态框
+                    this.isSame = res.resultInfo.isRight;
+                    if(!localStorage.getItem("iToken") && res.resultInfo.continue){
+                        this.showContinueAlert();
+                    }else {
+                        this.requestOTP();
+                    }
+                }else {
+                    this.toErrorPage(res.message);
+                }
+            });
+        }).catch(res=> {
+            this.toErrorPage(res.statusText, loading);
+        });
+    }
+
+    updateBaseInfo(){
+        this.resetSendData();
+        let loading = this.commonService.loadingModel('');loading.present();
+        this.httpService.httpRequest('updateinfoservice', this.httpService.sendData).then(res=>{
+            loading.dismiss().then(()=>{
+                if(res.status == 'success'){
+                    this.navCtrl.push(Page2, {"continue":true});
+                }else if(res.status == "fail" && res.errorCode == "err-5001"){
+                    this.commonService.alertModel('注意','你的手提電話號碼及電郵地址已有登記，請勿重複申請！','確定');
+                }else if(res.status == "fail" && res.errorCode == "err-5003"){
+                    this.commonService.alertModel('注意','郵箱已被占用，請更換郵箱！','確定');
+                } else {
+                    this.toErrorPage(res.message);
+                }
+            });
+        }).catch(res=> {
+            this.toErrorPage(res.statusText, loading);
+        });
+    }
+
+    requestOTP(){
+        let loading = this.commonService.loadingModel('');loading.present();
+        this.httpService.httpRequest('sendsmsservice').then(res=>{
+            loading.dismiss().then(()=>{
+                if(res.status == 'success'){
+                    this.showOTPAlert();
+                }else if(res.status == "fail" && res.errorCode == "err-3001") {
+                    this.showOTPAlert();
+                }else if((res.status == "fail" && res.errorCode == "err-4001") || (res.status == "fail" && res.errorCode == "err-4002")){
+                    this.commonService.alertModel('注意','你的申請過於頻繁，請一小時後再試！','確定');
+                }else if(res.status == "fail" && res.errorCode == "err-5001") {
+                    this.commonService.alertModel('注意','你的手提電話號碼及電郵地址已有登記，請勿重複申請！','確定');
+                }else {
+                    this.toErrorPage(res.statusText);
+                }
+            });
+        }).catch(res=> {
+            this.toErrorPage(res.statusText, loading);
+        });
+    }
+
+    checkOTP(otpNum,alert,errNode) {
+        let loading = this.commonService.loadingModel('');loading.present();
+        this.httpService.httpRequest('checksmsservice',{"checkCode":otpNum}).then(res=>{
+            loading.dismiss().then(()=>{
+                if(res.status == 'success'){
+                    alert.dismiss().then(()=>{
+                        clearTimeout(this.timer);
+                        this.isSame ? this.navCtrl.push(Page2,{"continue":this.isContinue}) :this.showDiffAlert();
+                    });
+                }else if(res.errorCode == "err-3004"){//输错超过6次，重新输入
+                    alert.dismiss().then(()=>{
+                        try {
+                            localStorage.removeItem("iToken");
+                        } catch(e) {
+
+                        }
+                        clearTimeout(this.timer);
+                        // this.commonService.alertModel('注意','一次性密碼輸錯超過6次，請重新申請！','確定');
+                        this.toErrorPage(res.statusText);
+                    });
+                }else if(res.errorCode == "err-3003"){//输错超过上限，账户锁死
+                    alert.dismiss().then(()=>{
+                        clearTimeout(this.timer);
+                        this.toErrorPage(res.statusText);
+                    });
+                }else if(res.errorCode == "err-0001"){//otp为空
+                    errNode.innerHTML = '請填寫一次性密碼';
+                }else {
+                    errNode.innerHTML = '一次性密碼填寫不正確';
+                }
+            });
+        }).catch(res=> {
+            this.toErrorPage(res.statusText, loading);
+        });
+    }
+
+    showOTPAlert() {
+        let comfirmModel = this.commonService.comfirmModel('一次性密碼', '一次性密碼已發送到你的手提電話<br>'+this.showMobilNum+'。<p class=smsErr></p>',
+            '取消', data => {clearTimeout(this.timer);},
+            '繼續', data=>{
+                let errNode =  document.getElementsByClassName('smsErr')[0];
+                (/^\d{6}$/.test(data.verCode))?this.checkOTP(data.verCode,comfirmModel,errNode):errNode.innerHTML = '請填寫正確的一次性密碼';
+                return false
+            },
+            [{id: "verCode", name: 'verCode', placeholder: '請填寫一次性密碼', type: 'tel'}]
+        );
+        comfirmModel.present().then(()=>{
+            let errNode =  document.getElementsByClassName('smsErr')[0];
+            let inputNode = document.getElementById('verCode');
+            inputNode.focus();
+            inputNode.addEventListener('focus',()=>{ errNode.innerHTML = '' });
+        });
+        setTimeout(() => {
+            const ele = document.getElementById("verCode").parentElement;
+            let newNode = document.createElement("label");
+            newNode.innerHTML = "99s";
+            newNode.className = "countTime";
+            ele.appendChild(newNode);
+            ele.style.position = "relative";
+            ele.firstElementChild.setAttribute("maxLength", "6");
+            this.oldTime = new Date();
+            this.showLastTime(newNode, 99, comfirmModel);
+        },0);
+    }
+
+    showLastTime(node, maxTime, hasOTP) {
+        this.timer = setTimeout(()=> {
+            let nowTime: any = new Date();
+            let timeToNum = Math.floor((nowTime - this.oldTime) / 1000);
+            if (timeToNum <= maxTime) {
+                node.innerHTML = (maxTime - timeToNum) + 's';
+                this.showLastTime(node, maxTime, hasOTP);
+            }else {
+                //这里应该有个返回OTP了几次的接口
+                node.innerHTML = '重新發送';
+                node.onclick = ()=> {
+                    hasOTP.dismiss().then(()=> {
+                        this.requestOTP();
+                    })
+                };
+                return;
+            }
+        }, 1000);
+    }
+
+    showContinueAlert(){
+        let prompt = this.commonService.comfirmModel('注意', '根據記錄，你較早前的申請尚未完成，要繼續完成申請還是重新申請？',
+            '重新申請', data=> {
+                if(!localStorage.getItem("iToken")) {
+                    prompt.dismiss().then(() => {
+                        this.isContinue = false;
+                        this.requestOTP();
+                    });
+                    return false;
+                }
+            }, '繼續申請', data=> {
+                prompt.dismiss().then(() => {
+                    this.isContinue = true;
+                    this.requestOTP();
+                });
+                return false;
+            }
+        );
+        prompt.present();
+    }
+
+    showDiffAlert(){
+        let prompt = this.commonService.comfirmModel('注意', '你填寫的手提電話號碼或電郵地址與早前的記錄不同，請重新填寫或選擇重新申請！',
+            '重新填寫', '', '重新申請', data=> {
+                prompt.dismiss().then(() => {
+                    this.navCtrl.push(Page2, {"continue": false});
+                });
+                return false;
+            }
+        );
+        prompt.present();
+    }
+    toErrorPage(errMsg, loader?: any) {
+        loader? (loader.dismiss().then(()=> {this.navCtrl.setRoot(ErrorPage, {errMsg: errMsg})})):this.navCtrl.setRoot(ErrorPage, {errMsg: errMsg});
+    }
+
+    hideNum(str) {
+        return '****' + str.substr(4);
+    }
+
+    showStatement(title, message) {
+        event.preventDefault();
+        this.commonService.alertModel('重要聲明','本行可根據你提供的資料透過電話、短訊 / 多媒體訊息或電郵聯絡你跟進有關私人貸款申請（即使你未有成功遞交申請）。','確定');
+    }
+
+    keyUp(e) {
+        // e.target.value = e.target.value.toString().replace(/[\,]*/g,"");
+        if(/[^\d]/.test(e.target.value)) {
+            this.errObj.isRight = "貸款額應該只包含數字0-9，不得含有英文字母或其他字符。";
+        } else if(Number(e.target.value) > this.amountRange.max || Number(e.target.value) < this.amountRange.min) {
+            this.errObj.isRight = "請填寫介乎HK$ 5,000與HK$ 1,200,000之間的貸款額。";
+        } else if(Number(e.target.value)%1000 != 0) {
+            this.errObj.isRight = "貸款額應該以HK$ 1,000爲基準";
+        } else {
+            this.errObj.isRight = '';
+        }
+    }
+
+    iptBlur(e) {
+        this.isBlur=true;
+        !this.errObj.isRight && (this.loan.currVal = e.target.value);
+        this.errObj.isRight = '';
+        this.toFormat()
+    }
+
+    unFormat(e) {
+        this.isBlur = false;
+        e.target.value = e.target.value.toString().replace(/[\,]*/g,"");
+    }
+
+    toFormat() {
+        if (this.isBlur && !this.errObj.isRight) {
+            this.elRef.nativeElement.querySelector("#amount").value = this.loan.currVal ? this.loan.currVal.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1" + ',') : 0;
+        }
+    }
+}

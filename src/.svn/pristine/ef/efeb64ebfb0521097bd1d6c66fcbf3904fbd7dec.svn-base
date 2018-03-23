@@ -1,0 +1,30 @@
+{
+    "status":"success",
+    "message":"",
+    "errCode":"",
+    "systemTime": "2017-08-02",
+    "resultInfo":{
+        "occupationType": "1",
+        "companyEnName": "HKBEA",
+        "industryNature": "IT",
+        "occupation": "Software engineer",
+        "income": "8000",
+        "tenureYear": "8",
+        "companyMobileNo": "98765432",
+        "formerCompanyEnName": "BEA Securities",
+        "formerTenureYear": "10",
+        "bankNo": "003",
+        "accountNo": "601108812100015",
+        "bankName": "HKBEA",
+        "isRelative":true,
+        "relativeSurname":"Chan",
+        "relativeName":"Tun",
+        "relative":"父子",
+        "useEmail":true,
+        "useSms":true,
+        "useAdMail":false,
+        "useFlyer":false,
+        "useMobile":true,
+        "useOther":false
+    }
+}

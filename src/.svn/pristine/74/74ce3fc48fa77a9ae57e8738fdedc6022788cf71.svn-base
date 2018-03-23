@@ -1,0 +1,60 @@
+<ion-header color="bea" [style.display]="commonService.isWebset ? 'block' : 'none'">
+  <ion-navbar class="bea-header"></ion-navbar>
+</ion-header>
+
+<ion-content [ngClass]="{'remove-header': commonService.isWebset == false}">
+  <header-step [step]=0 [isStep]="false"></header-step>
+
+  <div class="loan-padding">
+    <div class="loan-item">
+      <div class="loan-amount">
+        <label for="amount">HK$</label>
+        <div class="show-err" *ngIf="errObj.isRight">{{errObj.isRight}}</div>
+        <input id="amount" type="tel" (keyup)="keyUp($event)" (focus)="unFormat($event)" (blur)="iptBlur($event)" maxlength="7"/>
+      </div>
+      <ion-range class="range" [min]="amountRange.min" color="green-bg" [max]="amountRange.max" [step]="amountRange.step" [(ngModel)]="loan.currVal" (ionChange)="changeRate()">
+        <ion-label range-left>貸款額 </ion-label>
+      </ion-range>
+    </div>
+
+    <div class="loan-item">
+        <div class="loan-amount" ></div>
+      <ion-range *ngIf="refundRange.step" class="range range-refund" [min]="refundRange.min" [max]="refundRange.max" [step]="refundRange.step" snaps="true" [(ngModel)]="loan.refundTime" (ionChange)="changeRate()">
+        <ion-label range-left>還款期</ion-label>
+      </ion-range>
+    </div>
+
+    <div class="loan-item" style="height: 1.5rem"></div>
+
+    <div class="loan-rate">
+      <div class="rate_1 rate-month">
+        <p>每月平息</p>
+        <h5>{{(loan.mir * 100).toFixed(3)}}%</h5>
+      </div>
+      <div class="rate_1 rate-year">
+          <p>實際年利率</p>
+          <h5>{{(loan.apr * 100).toFixed(2)}}%</h5>
+        </div>
+        <div class="rate_2 rate-pay">
+            <p>每月還款額</p>
+            <!-- <h5 *ngIf="loan.baseRateList.length > 0">{{ commonService.moneyFormat((loan.currVal / loan.baseRateList[loan.refundTime - 1].key  + loan.currVal * loan.mir).toFixed(2)) }}</h5> -->
+            <h5 *ngIf="loan.baseRateList.length > 0">{{ commonService.setMonthPay(loan.currVal, loan.mir, loan.fee, loan.baseRateList[loan.refundTime - 1].key) }}</h5>
+          </div>
+    </div>
+  </div>
+    
+    
+    
+    <ion-list id="selectInfo">
+      <form-item #loanPur [name]="loanPurposeTitle" [errMsg]="errObj.loan" [opItem]="opItems" id="loan"></form-item>
+      <form-item #phone [name]="phoneTitle" [inputType]="'tel'" [errMsg]="errObj.phone" [maxLen]=8 id="phone" [isDisabled]="!commonService.canChange" [isMobile]="showMobile" (click)="showMobile=true"></form-item>
+      <form-item #email [name]="emailTitle" [errMsg]="errObj.email" id="email" [maxLen]=40></form-item>
+  </ion-list>
+
+  <div class="form-item" id="isAgree" style="position: relative;">
+      <div style="left: 3.5rem;" class="show-err" *ngIf="errObj.isAgree" (click)="errObj.isAgree = ''" @fadeIn>{{errObj.isAgree}}</div>
+      <p class="notice"><input style="vertical-align: middle;" id="checkbox" class="my-checkbox" type="checkbox" [(ngModel)]="isAgree" (click)="errObj.isAgree = ''"><label for="checkbox" style="vertical-align: middle;"> 本人已參閱、明白及同意各項<a class="underline font-blue" (click)="showStatement()">重要聲明</a>。</label></p>
+  </div>
+    
+  <button ion-button class="my-btn" (click)="saveAnext()">儲存及下一步</button>
+</ion-content>

@@ -1,0 +1,12 @@
+{
+    "status":"success",
+    "message":"",
+    "errCode":"",
+    "resultInfo": {
+        "nationality": "",
+        "idCard":"",
+        "income": "",
+        "address": ""
+    }
+  }
+  

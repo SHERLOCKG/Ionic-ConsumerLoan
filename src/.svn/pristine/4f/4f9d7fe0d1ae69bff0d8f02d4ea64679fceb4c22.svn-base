@@ -1,0 +1,16 @@
+{
+    "status":"success",
+    "message":"",
+    "errCode":"",
+    "resultInfo":{
+        "mobileNo": "9876****",
+        "email": "J*********@gmail.com",
+        "id": "123",
+        "continue": "true",
+        "unexist": "false",
+        "productCode": "TC1",
+        "loanPurpose": "2",
+        "loanAmount": "5000",
+        "refundTime": "36"
+    }
+}

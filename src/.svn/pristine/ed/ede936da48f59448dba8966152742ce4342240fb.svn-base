@@ -1,0 +1,141 @@
+page-home {
+  .loan-item {
+    background: -webkit-linear-gradient(left, $beaOrange , $orange-bg);
+    background: linear-gradient(to right, $beaOrange , $orange-bg);
+    padding-top: 1rem;
+    color: #fff;
+    margin-bottom: .4rem;
+  }
+  .ma-12 {
+    margin-left: -5% !important;
+  }
+  .ma-24 {
+    margin-left: 15% !important;
+  }
+  .ma-36 {
+    margin-left: 35% !important;
+  }
+  .ma-48 {
+    margin-left: 55% !important;
+  }
+  .ma-60 {
+    margin-left: 75% !important;
+  }
+  .loan-amount {
+    position: relative;
+    margin: 0 auto;
+    width: 16rem;
+    height: 3rem;
+    line-height: 3rem;
+    font-size: 1.6rem;
+    font-weight: bold;
+    .amount-input {
+      display: inline-block;
+    }
+    #amount {
+      width:11rem;
+      margin-top:-2px;
+      height: 3rem;
+      border: 0;
+      outline: 0;
+      background-color: transparent;
+    }
+  }
+  .loan-rate {
+    display: flex;
+    -webkit-display: flex;
+    margin: .5rem 0 1rem;
+    color: #fff;
+    text-align: right;
+    p {
+      margin-bottom: 3.8rem;
+    }
+    .rate-month {
+      background: $beaOrange;
+    }
+    .rate-year {
+      background: $beaRed;
+    }
+    .rate-pay {
+      background: #a41a31;
+    }
+    .rate_1 {
+      flex: 1;
+      padding: .8rem;
+    }
+    .rate_2 {
+      padding: .8rem;
+      flex: 1.5;
+    }
+  }
+
+
+
+
+  ion-content {
+    text-align: center;
+  }
+  .loanItem {
+    position: relative;
+    text-align: left;
+    padding: 0 16px;
+    span {
+      padding-left: 40px;
+    }
+    
+    .range {
+      margin-top:.8rem;
+      .range-bar-active {
+        background: $baseGreen;
+      }
+      .range-knob {
+        line-height:28px;
+      }
+      .range-tick-active {
+        background: #8ab047;
+      }
+    }
+    .purpose {
+      position: absolute;
+      top: -11px;
+      width: 80%;
+      max-width: 100% !important;
+      .select-text {
+        text-align: right;
+      }
+    }
+  }
+  .notice {
+    padding: 0 15%;
+    font-size: 1.2rem;
+    color: #666;
+  }
+  .loanPay {
+    p {
+      line-height: 1.6;
+    }
+    .min-font {
+      font-size: 1.2rem;
+      margin-bottom: .1rem;
+    }
+    span {
+      color: $baseGreen;
+      font-size: 2rem;
+      display: inline-block;
+      margin: .5rem 0;
+    }
+  }
+  .refund-tag {
+    color: #fff;
+    margin-top: -2.5rem;
+    margin-left: -1.5rem;
+    font-size: 16px;
+    font-weight: bold;
+    display: block;
+    width: 6.4rem;
+  }
+  .show-err {
+    bottom: 3rem;
+    font-weight: normal;
+  }
+}

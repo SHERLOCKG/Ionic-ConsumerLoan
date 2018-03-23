@@ -1,0 +1,12 @@
+{
+    "status":"success",
+    "message":"",
+    "errorCode":"",
+    "systemTime": "2017-08-02",
+    "resultInfo":{
+      "isBeaUser": true,
+      "isHKResidents": false,
+      "idCardPref": "A123456",
+      "idCardSuf": "3"
+    }
+  }

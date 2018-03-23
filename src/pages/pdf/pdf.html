@@ -1,0 +1,18 @@
+<ion-header *ngIf="commonService.isWebset">
+  <ion-navbar class="bea-header"></ion-navbar>
+</ion-header>
+<ion-content>
+  <div>
+    <ion-icon ios="ios-arrow-back" *ngIf="!commonService.isWebset" class="back-icon" (click)="backToPage()"></ion-icon>
+    <button id="prev" (click)="goPrevious()">上一頁</button>
+    <button id="next" (click)="goNext()">下一頁</button>
+    &nbsp; &nbsp;
+    <span>Page: <span id="page_num"></span> / <span id="page_count"></span></span>
+  </div>
+
+  <ion-scroll #ionScrollContainer scrollX="true" scrollY="true" zoom="false">
+	  <div #container class="image">
+      <canvas #image id="the-canvas" ></canvas>
+	  </div>
+	</ion-scroll>
+</ion-content>

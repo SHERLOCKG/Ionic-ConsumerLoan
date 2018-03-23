@@ -1,0 +1,164 @@
+page-result {
+  text-align: center;
+  .result-pic {
+    ion-icon {
+      font-size: 8rem;
+      color:#F59F2F;
+    }
+  }
+  .result-text {
+    margin: 1rem 0;
+    position: relative;
+  }
+  .approved {
+    margin: 0 1rem 1rem;
+    padding: 2.8rem 0;
+    color: white;
+    text-align: center;
+    background: -webkit-linear-gradient(left,#F59F2F 0%,#FCE266 100%);
+    background: -moz-linear-gradient(left,#F59F2F 0%,#FCE266 100%);
+    background: -o-linear-gradient(left,#F59F2F 0%,#FCE266 100%);
+    background: linear-gradient(left,#F59F2F 0%,#FCE266 100%);
+  }
+  .offered {
+    margin: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 4px solid #FFCE32;
+    text-align: center;
+  }
+  .result-data {
+    font-size: 1.5rem;
+    line-height: 1.6;
+    display: flex;
+    .flex_box {
+      display: flex;
+      width: 100%;
+      span {
+        display: block;
+      }
+    }
+    .flex_boxes {
+      display: inline-block;
+      width: 50%;
+      border-left: 1px solid #ABACAE;
+      .checkbox-icon-box {
+      margin-left: -3rem;
+      }
+    }
+    .flex_title {
+      display: inline-block;
+      width: 45%;
+      margin-left: 1rem;
+      text-align: left;
+      span {
+        display: block
+      }
+    }
+    .flex_detail {
+      display: inline-block;
+      text-align: left;
+      span {
+        display: block
+      }
+    }
+  }
+  .device-sm {
+    .flex_title {
+      width: 10rem;
+    }
+    .line-bar {
+      left: 65%;
+    }
+  }
+  .two-part .flex_title {
+    position: relative;
+    left: 20%;
+    text-align: left;
+  }
+  .two-part .flex_detail {
+    position: relative;
+    left: 38%;
+    text-align: left;
+  }
+  .refer-code {
+    margin: 1rem;
+    padding: 1.4rem 0;
+    background: #F40527;
+    color: white;
+    font-weight: bold;
+    font-size: 1.6rem;
+  }
+  .refer-date {
+    font-size: 1.5rem;
+    line-height: 1.6;
+  }
+  .special{
+    color: rgba(34,177,76,1.0);
+    font-weight: bold;
+  }
+  .pending-text {
+    margin-top: 2rem;
+    p {
+      margin-bottom: 1rem;
+      padding: 0 2rem;
+    }
+  }
+  .apply-tips {
+    width: 100%;
+    margin-top: 2rem;
+    p {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    img {
+      max-width: 8rem;
+      vertical-align: middle;
+    }
+    .img-middle {
+      margin-right: 3rem;
+    }
+  }
+  .btn {
+    margin-left: 1.5rem;
+    display: inline-block;
+    margin-top: 2rem;
+    background-color: #FF9A34;
+    color: white;
+    width: 39%;
+    max-width: 12rem;
+    height: 4.3rem;
+    font-size: 1.6rem;
+    p {
+      opacity: 0.6;
+    }
+  }
+  .hyper-link {
+    text-decoration: underline;
+    font-style: normal;
+  }
+  .rule-text {
+    margin: 0rem 1rem;
+    padding-bottom: 1.5rem;
+    font-size: 1.2rem;
+    border-bottom: 1px solid #EEE;
+  }
+  .fail-text {
+    text-align: center;
+    padding-top: 1rem;
+  }
+  .checkbox-icon-box {
+    position: relative;
+    i {
+      width: 2rem;
+      height: 2rem;
+    }
+    span:last-child {
+      position: absolute;
+      top: 5%;
+    }
+  }
+  .checkbox-icon.checked::after {
+    width: 1rem;
+    height: 1rem;
+    }
+}

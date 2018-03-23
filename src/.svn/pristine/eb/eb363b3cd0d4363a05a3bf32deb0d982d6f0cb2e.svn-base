@@ -1,0 +1,9 @@
+{
+  "status":"success",
+  "message":"",
+  "errorCode":"",
+  "resultInfo": {
+    "result": "approved",
+    "loanOption": 0
+  }
+}

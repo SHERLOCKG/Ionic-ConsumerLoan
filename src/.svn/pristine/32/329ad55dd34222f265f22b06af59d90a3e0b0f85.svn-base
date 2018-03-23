@@ -1,0 +1,272 @@
+page-page2 {
+    .canvas {
+        display: none;
+    }
+    .err-hint:lang(En) {
+        font-size: 1rem;
+    }
+    .must-icon {
+        position: absolute;
+        left:.5rem;
+        font-weight: bold;
+        color: $beaRed;
+        font-size: 3rem;
+        z-index: 1000;
+    }
+    .hint-box {
+        padding: 1rem 1.5rem;
+        font-size: 1.2rem;
+        color: $gray-font;
+    }
+    .hk-cbox {
+        position: relative !important;
+        z-index: 99;
+        .checkbox-icon {
+            position: absolute;
+            left: -2.4rem;
+        }
+    }
+    .picList {
+        img {
+            height: 24px;
+        }
+    }
+    .showIcon {
+        font-size: 2.4rem;
+        line-height: 1.41;
+    }
+    .upload {
+        position: absolute;
+        font-size: 0;
+        width: 100%;
+        height: 100%;
+        right: 0;
+        top: 0;
+        z-index: 99;
+        opacity: 0;
+    }
+    .file-txt {
+        margin:  .4rem 0;
+        line-height: 1.6rem;
+    }
+    // .min-height {
+    //     min-height: 4.7rem;
+    // }
+    .cut-line {
+        width:32%;
+        display: inline-block;
+    }
+    .add-icon {
+        position: absolute;
+        width:100%;
+        left:0;
+        top:50%;
+        color:$orange-bg;
+        font-size: 28px;
+        font-weight: bolder;
+        margin-top:-14px;
+    }
+    .card-img {
+        width: 85px !important;
+    }
+     .box-grid {
+        position: relative;
+        width: 100%;
+         height:11.2rem;
+    }
+    .box-grid.special {
+        height:16rem;
+    }
+    @media screen and (min-width: 376px) {
+        .box-grid {
+            position: relative;
+            width: 100%;
+            height:21.4vh;
+        }
+        .box-grid.special {
+            height:25.4vh;
+        }
+    }
+    .show-grid {
+        position: relative;
+        width: 42%;
+        display: flex;
+        text-align: center;
+        float: left;
+        padding: 0 1rem;
+        margin-bottom: .9rem;
+    }
+    .show-icon {
+        width: 2.2rem;
+        height: 7.6rem;
+        position: relative;
+        ion-icon {
+            font-size: 2rem;
+            color: #ccc;
+        }
+        .hint-icon-del {
+            position: absolute;
+            bottom: 0rem;
+            left: 0;
+            font-size: 2.2rem;
+            width: 2.2rem;
+            text-align: center;
+        }
+    }
+    .show-pic {
+        .pic-border {
+            //font-size: 2.8rem;
+            //line-height: 5.5rem;
+            border: 1px solid #eee;
+            border-radius: .5rem;
+            //height: 5.5rem;
+            position: relative;
+        }
+        .pic-border:before {
+            content:"";
+            display: inline-block;
+            padding-bottom: 64%;
+            //vertical-align: middle;
+        }
+        font-size: 1.2rem;
+        position: relative;
+        flex: 1;
+        img {
+            //width: 100%;
+            height: 100%;
+            position: absolute;
+            opacity: .8;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+    }
+    .grade-type {
+        margin-top: 8px;
+        .list-header{
+            background-color: #fff;
+            color: #000;
+            font-weight: 400;
+        }
+    }
+    .special-width {
+        width: calc(100% + 6rem);
+        width: -webkit-calc(100% + 6rem);
+        width: -moz-calc(100% + 6rem);
+        margin-left: -3rem;
+    }
+    .err-passport {
+        ion-label {
+            white-space: normal;
+        }
+    }
+    .page-bottom-btn {
+        // position: fixed;
+        // bottom: -2.5rem;
+        // bottom: 0;
+        // left: 15%;
+    }
+    .show-err {
+        position: absolute;
+        z-index: 9;
+        max-width: 96%;
+        background-color: #fff;
+        border: .55px solid $beaRed;
+        left: .6rem;
+        padding: .5rem .8rem;
+        //min-height: 3rem;
+        border-radius: .5rem;
+        bottom: 100%;
+        color:$beaRed;
+        font-size: 1rem;
+        text-align: left;
+        box-shadow: 0 .3rem .8rem rgba(0, 0, 0, .2);
+    }
+    .show-err:after {
+        content: '';
+        display: block;
+        position: absolute;
+        bottom: -14px;
+        left: 2rem;
+        //border-right:5px solid transparent;
+        //border-left:5px solid transparent;
+        //border-top:7px solid $beaRed;
+        border-style: solid;
+        border-width: 7px;
+        border-color: $beaRed transparent transparent transparent;
+    }
+    .list-ios > .item-block:last-child {
+        border: 0px !important;
+    }
+    .check-item-btn {
+        position: absolute;
+        top: 50%;
+        right: 3%;
+        width: 4.4rem;
+        font-size: 1.2rem;
+        transform: translateY(-140%);
+        overflow: hidden;
+    }
+    .idcard-box {
+        width:80%;
+        display: inline-block;
+        .item-inner {
+            padding-left:16px;
+            margin-left:-16px;
+            border-bottom: 1px solid #c8c7cc!important;
+        }
+    }
+    .addStyle {
+        width:6%;
+        text-align:center;
+        display: inline-block;
+        padding:0;
+        .item-inner {
+            border-bottom: 1px solid #c8c7cc!important;
+            padding-right: 0 !important;
+            input {
+                text-align: center;
+                width: 100% !important;
+                margin-right: 0 !important;
+                padding-left: 0 !important;
+            }
+        }
+    }
+    .list{
+        .lefticon {
+            vertical-align: bottom;
+            padding:0;
+            min-height:3.4rem;
+            .item-inner {
+                border-bottom:0!important;
+                padding:0;
+            }
+            .label {
+                font-size: 2.5rem;
+                margin:0;
+                color:#c8c7cc;
+                vertical-align: bottom;
+                font-weight: 300;
+            }
+        }
+    }
+    .disabled-opacity{
+        opacity: .5;
+    }
+
+    .loading-spinner {
+        circle {
+            fill:#fff;
+        }
+    }
+
+    .option-btn {
+        width: 50%;
+        height: 100%;
+        float: left;
+        font-size: 14px;
+        cursor: pointer;
+        color:#888585;
+        border: 2px solid #8ab047;
+        background-color:#f7f7f7;
+    }
+}

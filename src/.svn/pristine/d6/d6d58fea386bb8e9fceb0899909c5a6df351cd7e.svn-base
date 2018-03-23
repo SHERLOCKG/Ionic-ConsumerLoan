@@ -1,0 +1,64 @@
+{
+    "status":"success",
+    "message":"",
+    "errCode":"",
+    "resultInfo":{
+        "occupationTypeItems": [
+            {"nameTC": "在職人士","nameEN": "Employed","value": "1"},
+            {"nameTC": "自僱人士","nameEN": "Self Employment","value": "2"},
+            {"nameTC": "學生","nameEN": "Student","value":"3"},            
+            {"nameTC": "待業","nameEN": "Unemployed","value": "4"},
+            {"nameTC": "家庭主婦","nameEN": "Housewife","value": "5"}
+        ],
+        "industryNatureItems":[
+            {"nameTC": "服務業","nameEN": "Employed","value": "1"},
+            {"nameTC": "個體戶","nameEN": "Unemployed","value": "2"},
+            {"nameTC": "待業","nameEN": "Self Employment","value": "3"},
+            {"nameTC": "失業","nameEN": "Student/Housewife","value": "4"},
+            {"nameTC": "其他，請註明","nameEN": "Others","value": "5"}
+        ],
+        "occupationItems":[
+            {"nameTC": "總經理","nameEN": "Employed","value": "1"},
+            {"nameTC": "副總經理","nameEN": "Unemployed","value": "2"},
+            {"nameTC": "高級程序員","nameEN": "Self Employment","value": "3"},
+            {"nameTC": "碼農","nameEN": "Student/Housewife","value": "4"},
+            {"nameTC": "其他，請註明","nameEN": "Others","value": "5"}
+        ],
+        "positionList": {
+            "1": [
+                    {"nameTC": "總經理1","nameEN": "Employed","value": "11"},
+                    {"nameTC": "副總經理1","nameEN": "Unemployed","value": "12"},
+                    {"nameTC": "高級程序員1","nameEN": "Self Employment","value": "13"},
+                    {"nameTC": "碼農1","nameEN": "Student/Housewife","value": "14"}
+                ],
+            "2": [
+                    {"nameTC": "總經理2","nameEN": "Employed","value": "21"},
+                    {"nameTC": "副總經理2","nameEN": "Unemployed","value": "22"},
+                    {"nameTC": "高級程序員2","nameEN": "Self Employment","value": "23"},
+                    {"nameTC": "碼農2","nameEN": "Student/Housewife","value": "24"},
+                    {"nameTC": "其他，請註明","nameEN": "Others","value": "25"}
+                ],
+            "3": [
+                    {"nameTC": "總經理3","nameEN": "Employed","value": "31"},
+                    {"nameTC": "副總經理3","nameEN": "Unemployed","value": "32"},
+                    {"nameTC": "高級程序員3","nameEN": "Self Employment","value": "33"},
+                    {"nameTC": "碼農3","nameEN": "Student/Housewife","value": "34"},
+                    {"nameTC": "其他，請註明","nameEN": "Others","value": "35"}
+                ],
+            "4": [
+                    {"nameTC": "總經理4","nameEN": "Employed","value": "41"},
+                    {"nameTC": "副總經理4","nameEN": "Unemployed","value": "42"},
+                    {"nameTC": "高級程序員4","nameEN": "Self Employment","value": "43"},
+                    {"nameTC": "碼農4","nameEN": "Student/Housewife","value": "44"},
+                    {"nameTC": "其他，請註明","nameEN": "Others","value": "45"}
+                ],
+            "5": [
+                    {"nameTC": "總經理5","nameEN": "Employed","value": "51"},
+                    {"nameTC": "副總經理5","nameEN": "Unemployed","value": "52"},
+                    {"nameTC": "高級程序員6","nameEN": "Self Employment","value": "53"},
+                    {"nameTC": "碼農5","nameEN": "Student/Housewife","value": "54"},
+                    {"nameTC": "其他，請註明","nameEN": "Others","value": "55"}
+                ]
+        }
+    }
+}

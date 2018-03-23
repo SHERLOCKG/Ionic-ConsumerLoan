@@ -1,0 +1,105 @@
+<ion-header *ngIf="commonService.isWebset">
+    <ion-navbar class="bea-header"></ion-navbar>
+</ion-header>
+
+<ion-content>
+    <header-step [step]=1></header-step>
+    <canvas class="canvas" #canvas></canvas>
+    <div class="main">
+        <div class="p2-checkbox">
+            <p>你是否現有東亞銀行客戶？<ion-icon class="info-icon" name="information-circle-outline" (click)="commonService.alertModel('東亞銀行客戶訂議', '<p class=alert-left-title>現有東亞銀行客戶指持有以下產品之客戶：</p><p class=alert-hint><span>-   </span> 顯卓理財</p><p class=alert-hint><span>-   </span> 至尊理財</p><p class=alert-hint><span>-   </span> i-Account</p><p class=alert-hint><span>-   </span> 自動轉賬支薪</p><p class=alert-hint><span>-   </span> 黃金</p><p class=alert-hint><span>-   </span> 理財小博士</p><p class=alert-hint><span>-   </span> 港元/外幣存款</p><p class=alert-hint><span>-   </span> 信用卡</p><p class=alert-hint><span>-   </span> 樓宇按揭及個人貸款</p>', '確定')"></ion-icon></p>
+            <p class="checkbox-icon-box">
+                <span class="float-l" (click)="hasComs = true;"><i class="checkbox-icon" [ngClass]="{'checked': hasComs == true}"></i>係</span>
+                <span class="float-r" (click)="hasComs = false;commonService.alertModel('信貸資料授權',tuMessage,'本人已参閱、明白及同意各項有關信貸資料授權。','','tu-message')"><i class="checkbox-icon" [ngClass]="{'checked': hasComs == false}"></i>唔係</span>
+            </p>
+        </div>
+        <!--<div class="agree-arrange-box" *ngIf="!hasComs"  id="isAgreeArrange">-->
+            <!--<div class="show-err" style="bottom: 2.8rem;left:-2rem;" *ngIf="errObj.isAgreeArrange" (click)="errObj.isAgreeArrange = ''" @fadeIn>{{errObj.isAgreeArrange}}</div>-->
+            <!--<p class="f12">-->
+                <!--<input style="vertical-align: middle" type="checkbox" [(ngModel)]="isAgreeArrange" (click) = "errObj.isAgreeArrange = ''" />-->
+                <!--本人已參閱、明白及同意各項<a href="javascript:;" class="underline font-blue" (click)="toPDF('ca');$event.stopPropagation()">信貸資料授權</a>。-->
+            <!--</p>-->
+        <!--</div>-->
+
+        <div class="form-item" *ngIf="hasComs" style="margin-top:1rem;position:relative">
+            <div class="show-err" style="bottom:40px;" *ngIf="errObj.idCard" @fadeIn (click)="errObj.idCard = ''">{{errObj.idCard}}</div>
+            <ion-item class="idcard-box" [ngClass]="{'error-border':errObj.idCardPref}" id="idCard">
+                <ion-label floating>香港身份證號碼：<span *ngIf="errObj.idCardPref" class="err-hint" style="display:block;">{{errObj.idCardPref}}</span></ion-label>
+                <ion-input [(ngModel)]="personInfo.idCardPref" maxLength="8" (ionFocus)="errObj.idCard = ''"></ion-input>
+            </ion-item>
+            <ion-item class="lefticon" style="width:3%;text-align:center;display: inline-block;">
+                <span>(</span>
+            </ion-item>
+            <ion-item class="addStyle" [ngClass]="{'error-border':errObj.idCardPref}">
+                <ion-label floating  style="opacity: 0;">最後一位: <span *ngIf="errObj.idCardPref" class="err-hint" style="display:block;">{{errObj.idCardPref}}</span></ion-label>
+                <ion-input [(ngModel)]="personInfo.idCardSuf" maxLength="1" (ionFocus)="errObj.idCard = ''"></ion-input>
+            </ion-item>
+            <ion-item class="lefticon" style="width:3%;text-align:center;display: inline-block;border: 0px;">
+                <span>)</span>
+            </ion-item>
+        </div>
+
+        <div class="p2-checkbox" *ngIf="!hasComs">
+            <p>你是否香港永久居民？</p>
+            <p class="checkbox-icon-box">
+                <span class="float-l" (click)='hasHKID = true;'><i class="checkbox-icon" [ngClass]="{'checked': hasHKID == true}"></i>係</span>
+                <span class="float-r" (click)='hasHKID = false;'><i class="checkbox-icon" [ngClass]="{'checked': hasHKID == false}"></i>唔係</span>
+            </p>
+        </div>
+
+        <div class="upload-pic-box">
+            <div class="upload-pic hkid" *ngIf="!hasComs">
+                <div class="show-err" *ngIf="errObj.HKID" (click)="errObj.HKID = ''" @fadeIn>{{errObj.HKID}}</div>
+                <span>香港身份證 <ion-icon class="hint-icon" name="information-circle-outline" (click)="commonService.alertModel('香港身份證', '如非香港永久居民，請提供香港身份證、原居地發出的有效護照及香港入境簽證副本', '確定')"></ion-icon></span>
+                <input class="upload" (change)="fileUpload($event, 'HKID')" id="HKID" type="file" accept="image/*" style="display: none;" [disabled]="ekyc.HKIDResult ||ekyc.HKIDChecking">
+                <input class="upload" (change)="fileUpload($event, 'StuID_Back')" id="StuID_Back" type="file" accept="image/*" style="display: none;" [disabled]="ekyc.HKIDResult ||ekyc.HKIDChecking">
+
+                <div class="pic-box" style="top:60%;right:9.5rem;height:3rem">
+                    <img *ngIf="file.HKID" [src]="file.HKID" alt="camera" item-end >
+                    <ion-icon *ngIf="file.HKID" [ngClass]="{'del-disabled': ekyc.HKIDResult || ekyc.HKIDChecking}" class="del-icon" name="ios-trash-outline" (click)="!(ekyc.HKIDResult ||ekyc.HKIDChecking) && delImg('HKID', true)"></ion-icon>
+                </div>
+                <div class="pic-box" style="top:60%;height:3rem">
+                    <img *ngIf="file.StuID_Back" [src]="file.StuID_Back" alt="camera" item-end >
+                    <ion-icon *ngIf="file.StuID_Back" [ngClass]="{'del-disabled': ekyc.HKIDResult || ekyc.HKIDChecking}" class="del-icon" name="ios-trash-outline" (click)="!(ekyc.HKIDResult ||ekyc.HKIDChecking) && delImg('StuID_Back', true)"></ion-icon>
+                </div>
+
+                <button class="btn-add" style="right:9rem;" (click)="errObj.HKID = '';showRemind('HKID')" [disabled]="ekyc.HKIDResult ||ekyc.HKIDChecking">正面<ion-icon [ngClass]="{'has-pic':file.HKID}" name="md-add-circle" style="margin:.5rem 0;"></ion-icon></button>
+                <button class="btn-add" (click)="errObj.StuID_Back = '';elRef.nativeElement.querySelector('#StuID_Back').click();" [disabled]="ekyc.HKIDResult ||ekyc.HKIDChecking">反面<ion-icon [ngClass]="{'has-pic':file.StuID_Back}" name="md-add-circle" style="margin:.5rem 0;"></ion-icon></button>
+                <button class="btn-confirm" [ngClass]="{'btn-disabled':!file.HKID || !file.StuID_Back || ekyc.HKIDChecking || ekyc.HKIDResult, 'no-bgImg': ekyc.HKIDResult}" *ngIf="hasHKID" (click)="showEKYCMsg('HKID')" [disabled]="!file.HKID || !file.StuID_Back || ekyc.HKIDChecking || ekyc.HKIDResult"><ion-spinner *ngIf="ekyc.HKIDChecking" class="loading-spinner" item-start name="dots"></ion-spinner>{{ ekyc.HKIDBtnText }}</button>
+            </div>
+            <div class="upload-pic passbook" *ngIf="!hasHKID && !hasComs">
+                <div class="show-err" *ngIf="errObj.Passbook" (click)="errObj.Passbook = ''" @fadeIn>{{errObj.Passbook}}</div>
+                <span>其他身份證明文件 <ion-icon class="hint-icon" name="information-circle-outline" (click)="commonService.alertModel('護照', '往來或前往(單程證)港澳通行證/香港特別行政區簽證身份書', '確定')"></ion-icon></span>
+                <input class="upload" (change)="fileUpload($event, 'Passbook')" id="Passbook" type="file" accept="image/*" style="display: none;" [disabled]="file.Passbook && (ekyc.HKIDResult ||ekyc.HKIDChecking)">
+                <div class="pic-box">
+                    <img *ngIf="file.Passbook" [src]="file.Passbook" alt="camera" item-end >
+                    <ion-icon *ngIf="file.Passbook" [ngClass]="{'del-disabled': file.Passbook && (ekyc.HKIDResult ||ekyc.HKIDChecking)}" class="del-icon" name="ios-trash-outline" (click)="!(file.Passbook && (ekyc.HKIDResult ||ekyc.HKIDChecking)) && delImg('Passbook', true)"></ion-icon>
+                </div>
+                <button class="btn-add" (click)="errObj.Passbook = '';elRef.nativeElement.querySelector('#Passbook').click();" [disabled]="file.Passbook && (ekyc.HKIDResult ||ekyc.HKIDChecking)"><ion-icon [ngClass]="{'has-pic':file.Passbook}" name="md-add-circle"></ion-icon></button>
+                <button class="btn-confirm" [ngClass]="{'btn-disabled':!file.HKID || !file.StuID_Back || !file.Passbook || ekyc.HKIDChecking || ekyc.HKIDResult, 'no-bgImg': ekyc.HKIDResult}" style="top:-8.1rem;height:16.1rem;" [disabled]="!file.HKID || !file.StuID_Back || !file.Passbook || ekyc.HKIDChecking || ekyc.HKIDResult" (click)="showEKYCMsg('HKID')"><ion-spinner *ngIf="ekyc.HKIDChecking" class="loading-spinner" item-start name="dots"></ion-spinner>{{ ekyc.HKIDBtnText }}</button>
+            </div>
+            <div class="upload-pic selfie" *ngIf="!hasComs">
+                <div class="show-err" *ngIf="errObj.StuID_Front" (click)="errObj.StuID_Front = ''" @fadeIn>{{errObj.StuID_Front}}</div>
+                <span>自拍照片 <ion-icon class="hint-icon" name="information-circle-outline" (click)="commonService.alertModel('自拍照', '請上傳本人的自拍照片', '確定')"></ion-icon></span>
+                <input class="upload" (change)="fileUpload($event, 'StuID_Front')" capture="user" id="StuID_Front" type="file" accept="image/*" style="display: none;" [disabled] = "ekyc.selfieResult ||ekyc.selfieChecking">
+                <div class="pic-box">
+                    <img *ngIf="file.StuID_Front" [src]="file.StuID_Front" alt="camera" item-end >
+                    <ion-icon *ngIf="file.StuID_Front" [ngClass]="{'del-disabled': ekyc.selfieResult ||ekyc.selfieChecking}" class="del-icon" name="ios-trash-outline" (click)="!(ekyc.selfieResult ||ekyc.selfieChecking) && delImg('StuID_Front', true)"></ion-icon>
+                </div>
+                <button class="btn-add" (click)="errObj.StuID_Front = '';showRemind('StuID_Front');" [disabled] = "ekyc.selfieResult ||ekyc.selfieChecking"><ion-icon [ngClass]="{'has-pic':file.StuID_Front}" name="md-add-circle"></ion-icon></button>
+                <button class="btn-confirm selfie-color" [ngClass]="{'btn-disabled':!file.StuID_Front || ekyc.selfieChecking || ekyc.selfieResult || !ekyc.HKIDResult, 'no-bgImg': ekyc.selfieResult}" [disabled]="!file.StuID_Front || ekyc.selfieChecking || ekyc.selfieResult || !ekyc.HKIDResult" (click)="callEKYC('selfie')"><ion-spinner *ngIf="ekyc.selfieChecking" class="loading-spinner" item-start name="dots"></ion-spinner>{{ ekyc.selfieBtnText }}</button>
+            </div>
+            <div class="upload-pic salary">
+                <div class="show-err" *ngIf="errObj.Perm_Addr" (click)="errObj.Perm_Addr = ''" @fadeIn>{{errObj.Perm_Addr}}</div>
+                <span>薪金證明 <ion-icon class="hint-icon" name="information-circle-outline" (click)="commonService.alertModel('薪金證明', '<p class=alert-left-title>以下其中一項薪金證明：</p><p class=alert-hint><span>-   </span> 薪俸稅單</p><p class=alert-hint><span>-   </span> 最近一個月糧單</p><p class=alert-hint><span>-   </span> 附有客戶姓名、賬戶號碼及薪酬金額的最近3個月銀行結單/存摺</p><p class=alert-hint><span>-   </span> 公司商業登記證及最新稅單 (只適用於獨資經營東主或公司合夥人)</p>', '確定')"></ion-icon></span>
+                <input class="upload" (change)="fileUpload($event, 'Perm_Addr')" id="Perm_Addr" type="file" accept="image/*" style="display: none;" >
+                <div class="pic-box">
+                    <img *ngIf="file.Perm_Addr" [src]="file.Perm_Addr" alt="camera" item-end >
+                    <ion-icon *ngIf="file.Perm_Addr" class="del-icon" name="ios-trash-outline" (click)="delImg('Perm_Addr', true)"></ion-icon>
+                </div>
+                <button class="btn-add" (click)="errObj.Perm_Addr = '';showRemind2();" ><ion-icon [ngClass]="{'has-pic':file.Perm_Addr}" name="md-add-circle"></ion-icon></button>
+            </div>
+        </div>
+    </div>
+    <button ion-button class="my-btn" [class.page-bottom-btn]="hasHKID" (click)="saveAnext()">儲存及下一步</button>
+</ion-content>

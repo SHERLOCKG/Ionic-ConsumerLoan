@@ -1,0 +1,17 @@
+<div class="step-bar">
+    <label *ngFor="let item of stepNo; let idx = index" [ngClass]="{'current': idx == step}" (click)="goBack(idx)">
+        <span class="column"></span>
+        <span>{{item}}</span>
+    </label>
+</div>
+
+<!-- <div class="head-title">
+    <span>私人貸款</span>
+</div>
+<div class="step-bar" *ngIf="isStep">
+    <label *ngFor="let item of stepNo; let idx = index">
+        <span [ngClass]="{'finish': idx < step, 'current': idx == step, 'half': isHalf}" (click)="goBack(idx)">{{item}}</span>
+        <div class="step-line" [ngClass]="{'finish': idx < step}"></div>
+    </label>
+    <span [ngClass]="{'finish': finish}"><ion-icon name="checkmark" class="finish-mark"></ion-icon></span>
+</div> -->

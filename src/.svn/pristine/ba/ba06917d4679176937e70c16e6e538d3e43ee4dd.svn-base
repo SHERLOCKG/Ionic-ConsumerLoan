@@ -1,0 +1,55 @@
+<ion-header *ngIf="commonService.isWebset">
+  <ion-navbar class="bea-header"></ion-navbar>
+</ion-header>
+
+<ion-content>
+  <header-step [step]=4></header-step>
+
+  <ion-list>
+    <ion-list-header class="relativeList">
+      <ion-checkbox [(ngModel)]="isRelative" class="relative-box"></ion-checkbox>
+      <ion-label item-start class="break-word f14">你有沒有親屬為東亞銀行之董事/僱員？</ion-label>
+      <ion-icon style="margin-right: 20px;" name="arrow-down" [name]="itemStatus.relativeMessage == 'none' ? 'arrow-down' : 'arrow-up'" item-end class="showIcon" (click) = "showHide('relativeMessage')"></ion-icon>
+    </ion-list-header>
+    <div [style.display]="itemStatus.relativeMessage">
+      <form-item #relativeName [name]="'董事/僱員香港身份證上之英文姓名：'" [maxLen]=20 [errMsg]="errObj.relativeName" id="relativeName" [isDisabled]="!isRelative" [keyFilter]="validaService.regExp.forLetter"></form-item>
+      <form-item #relative [name]="'關係：'" [errMsg]="errObj.relative" id="relative" [opItem]="relativeItems" [isDisabled]="!isRelative"></form-item>
+    </div>
+  </ion-list>
+
+  <ion-list>
+    <ion-list-header>選擇拒絕在直接促銷中使用個人資料</ion-list-header>
+      <div class="info-box">
+        <ion-item>
+          <p class="f12 color-b">本行可能會使用你的個人資料作直接促銷。如你不同意本行透過以下任何途徑使用你的個人資料作直接促銷(不包括只提供予本行私人銀行客戶之私人銀行服務直接促銷)，請於有關方格填上：
+            "<ion-icon name="md-checkmark"></ion-icon>"
+                <input style="opacity: 0.12;vertical-align: middle" (change)="ckReset('email')" type="checkbox" [(ngModel)]="checkObj.email" id="email" /><label for="email">電郵</label>
+                <input style="opacity: 0.12;vertical-align: middle" (change)="ckReset('flowMSM')" type="checkbox" [(ngModel)]="checkObj.flowMSM" id="flowMSM" /><label for="flowMSM">流動訊息 (短訊/多媒體訊息)</label>
+                <input style="opacity: 0.12;vertical-align: middle" (change)="ckReset('promotion')" type="checkbox" [(ngModel)]="checkObj.promotion" id="promotion" /><label for="promotion">推廣郵件</label>
+                <input style="opacity: 0.12;vertical-align: middle" (change)="ckReset('endCase')" type="checkbox" [(ngModel)]="checkObj.endCase" id="endCase" /><label for="endCase">隨結單郵寄之宣傳單張&nbsp;&nbsp;</label>
+                <input style="opacity: 0.12;vertical-align: middle" (change)="ckReset('mobile')" type="checkbox" [(ngModel)]="checkObj.mobile" id="mobile" /><label for="mobile">電話</label>
+                。如有任何途徑未有填上\"<ion-icon name="md-checkmark"></ion-icon>\"，即表示你同意本行可透過該途徑使用你的個人資料作直接促銷。如你是本行私人銀行客戶及不希望接受本行私人銀行服務之直接促銷活動，請與 閣下之客戶經理聯絡。
+          </p>
+        </ion-item>
+      </div>
+  </ion-list>
+
+  <ion-list>
+    <ion-list-header>提供詳細個人資料予第三者作直接促銷</ion-list-header>
+      <div class="info-box">
+        <ion-item>
+          <p class="f12 color-b">本行可能會將你的個人資料提供予東亞銀行有限公司其他集團成員作其包括銀行、保險及財務相關服務和產品的直接促銷之用而獲得金錢或其他財產的回報。</p>
+          <p class="f12 color-b">
+            <input type="checkbox" style="opacity: 0.2;vertical-align: middle;" [(ngModel)]="checkObj.reject" />
+            <span class="f12">如你不同意本行提供你的個人資料予東亞銀行有限公司其他集團成員作上述用途，請於有關方格填上"<ion-icon name="md-checkmark"></ion-icon>"</span>
+          </p>
+        </ion-item>
+        <ion-item>
+          <p class="hint-input f12">以上代表你目前就是否接收直接促銷聯繫或資訊的選擇，該選擇只會於此賬戶成功開立後生效，並將取代你於此申請前向本行表達之任何有關直接促銷的選擇。如你期盼本行立即更新你就直接促銷安排之選擇，請聯絡本行分行職員作個別安排。</p>
+          <p class="hint-input f12">請注意你以上的選擇適用於就本行的「個人資料（私隱）條例-個人資料收集（客戶）聲明」(「該聲明」)中所列出的產品、服務及/或標的類別的直接促銷。你亦可參閱該聲明以得知在直接促銷中可使用的個人資料的種類，以及你的個人資料可提供予什麼類別的人士以供該等人士在直接促銷中使用。</p>
+        </ion-item>
+      </div>
+  </ion-list>
+
+  <button ion-button class="my-btn" (click)="nextStep()">儲存及下一步</button>
+</ion-content>

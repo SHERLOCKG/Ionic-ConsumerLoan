@@ -1,0 +1,36 @@
+var root = this;
+var customConfig = function(obj) {
+    if (obj instanceof customConfig) return obj;
+    if (!(this instanceof customConfig)) return new customConfig(obj);
+};
+if (typeof exports !== 'undefined') {
+    if (typeof module !== 'undefined' && module.exports) {
+        exports = module.exports = customConfig;
+    }
+    exports.customConfig = customConfig;
+} else {
+    root.customConfig = customConfig;
+}
+customConfig.picUpload = '/FileUpload/picUploadService';
+customConfig.picGetToken = '/FileUpload/getFileUploadToken';
+customConfig.redirectURL = 'https://www.hkbea.com/html/tc/bea-consumer-loan-instalment-loan-special-rate.html';
+customConfig.isRedirect = true;
+customConfig.maxFileSize = 10;
+customConfig.pageTimeout = 30;
+customConfig.requestTimeout = 1;
+customConfig.alertMobile = '22111211';  /* Page2點擊提交按鈕的電話號碼 */
+customConfig.confirmMobile = '22111211';  /* 確認頁撥打的電話號碼 */
+customConfig.showMobile = '2211 1211';  /* 確認頁顯示的電話號碼 */
+customConfig.isWebview = true;      /* True 表示东亚头部    False 表示不带东亚头部 */
+customConfig.shareFB = 'www.hkbea.com/iloan';
+customConfig.shareWA = '東亞銀行勁快分期貸款，無須現身，現金一天到手！\n 即按 www.hkbea.com/iloan 申請勁快分期貸款，專享實際年利率低至2.70%。受條款約束。';
+customConfig.videoUrl = 'https://d1e8euzdi9wou2.cloudfront.net/ConsumerLoanVideo.mp4';
+customConfig.beaAppUrl = 'beahkapp://openpage/current';
+customConfig.pdfUrl = {
+    "tnc": "./assets/pdf/CLN_DDA_T&C.pdf",
+    "authorize": "./assets/pdf/CLN_DDA.pdf",
+    "dat": "./assets/pdf/CLN_DEC.pdf",
+    "tnctln": "./assets/pdf/CLN_T&C.pdf",
+    "ca": "./assets/pdf/eKYC-TU-consent.pdf",
+    "apr": "./assets/pdf/APR_Table.pdf"
+};

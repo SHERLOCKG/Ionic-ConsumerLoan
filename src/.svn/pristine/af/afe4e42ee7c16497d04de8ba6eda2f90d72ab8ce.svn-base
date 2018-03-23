@@ -1,0 +1,119 @@
+import { Injectable } from "@angular/core";
+import { AlertController,LoadingController, ToastController } from 'ionic-angular';
+
+@Injectable()
+export class CommonService {
+    canChange:boolean = true;
+    userId: string;
+    public areaService:any;
+    isWebset: boolean = true;
+    constructor(private alertCtrl: AlertController,private loadingCtrl:LoadingController, private toastCtrl: ToastController) {}
+    alertModel(title, message, ...args) {
+        return this.alertCtrl.create({
+            title: title,
+            message: message,
+            enableBackdropDismiss:false,
+            cssClass: args[2],
+            inputs: args[3],
+            buttons: [{
+                text: args[0],
+                role: 'cancel',
+                handler: args[1]
+            }]
+        }).present();
+    }
+
+    comfirmModel(title, message, ...args) {
+        return this.alertCtrl.create({
+            title: title,
+            message: message,
+            enableBackdropDismiss:false,
+            inputs: args[4],
+            buttons: [{
+                text: args[0],
+                handler: args[1]
+            },{
+                text: args[2],
+                handler: args[3]
+            }]
+        });
+    }
+
+    loadingModel(loadingText){
+        return this.loadingCtrl.create({
+            content: loadingText
+        });
+    }
+
+    toaseModel(message){
+        return this.toastCtrl.create({
+          message: message,
+          duration: 2000,
+          position: 'middle'
+        }).present();
+    }
+
+    moneyFormat(value: number) {
+        return value ? 'HK$ ' + value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1' + ',') : '';
+    }
+
+    setMobileFront(mobile) {
+        return '（852）' + mobile;
+    }
+
+    setMonthPay(currVal, monthRate, handFee = 0, refundTime) {
+        currVal = Number(currVal);
+        monthRate = Number(monthRate);
+        handFee = Number(handFee);
+        refundTime = Number(refundTime);
+        let sumMoney: any = ((currVal + currVal * handFee * refundTime / 12) + (currVal + currVal * handFee * refundTime / 12) * monthRate * refundTime) / refundTime;
+        return this.moneyFormat(sumMoney.toFixed(2));
+    }
+
+    scrollTo(node,errObj) {
+        let isRightToNext = true;
+        for (let key in errObj) {
+            if (errObj[key]) {
+                isRightToNext = false;
+                let yOffset = document.getElementById(key).offsetTop;
+                node.scrollTo(0, yOffset-20, 260);
+                break
+            }
+        }
+        return isRightToNext;
+    }
+
+    getUrlParams(name) {
+        let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i"); //定义正则表达式
+        let regOk = /^[A-Za-z0-9]+$/;
+        let parURL = window.location.search;
+        let r = parURL.substr(1).match(reg);
+        if (r != null && regOk.test(r[2])) {
+            return r[2];
+        }
+        return '';
+    }
+
+    getYearList(maxYear, maxMonth, hasZeroMonth ?: boolean) {
+        let yearOptionArr = [], monthOptionArr = [];
+        for (let y = 0; y <= maxYear; y++) {
+          yearOptionArr.push({
+            "value": y.toString(),
+            "text": y + '年'
+          });
+          for (let m = 0; m <= maxMonth; m++) {
+            monthOptionArr.push({
+              "value": y.toString() + '-' + m.toString(),
+              "parentVal": y.toString(),
+              "text": m + '月'
+            });
+          }
+        }
+        !hasZeroMonth && monthOptionArr.shift();
+        return [
+          {"options": yearOptionArr},
+          {"options": monthOptionArr}
+        ];
+    }
+}
+

@@ -1,0 +1,11 @@
+{
+    "status":"success",
+    "message":"",
+    "errCode":"",
+    "resultInfo": [
+        {"nameTC": "中學或以下","nameEN": "Secondray or Below","value": "1"},
+        {"nameTC": "中學畢業","nameEN": "Secondary Completed","value": "2"},
+        {"nameTC": "預科/專上學院","nameEN": "Post Secondary","value": "3"},
+        {"nameTC": "大學或以上","nameEN": "University or Above","value": "4"}
+        ]
+}

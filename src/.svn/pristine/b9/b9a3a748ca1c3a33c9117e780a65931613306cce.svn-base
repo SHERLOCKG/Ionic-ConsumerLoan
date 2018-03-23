@@ -1,0 +1,26 @@
+{
+    "status": "success",
+    "message": "",
+    "errorCode": "",
+    "resultInfo": [
+        {
+            "nameEN": "ACCOUNTING/AUDIT SERVICES",
+            "nameTC": "會計/審計",
+            "nameSC": "会计/审计",
+            "value": "1",
+            "producnameTcode": "Staff"
+        },{
+            "nameEN": "EDUCATION",
+            "nameTC": "教育",
+            "nameSC": "教育",
+            "value": "73",
+            "producnameTcode": "Staff"
+        },{
+            "nameEN": "BUSINESS OWNER (SOLEPROP/PARTNER)",
+            "nameTC": "銀行",
+            "nameSC": "自顾人仕",
+            "value": "64",
+            "producnameTcode": "Staff"
+        }
+    ]
+}

@@ -1,0 +1,8 @@
+{
+    "status":"success",
+    "message":"",
+    "errCode":"",
+    "resultInfo":{
+        "isHKID": true
+    }
+}

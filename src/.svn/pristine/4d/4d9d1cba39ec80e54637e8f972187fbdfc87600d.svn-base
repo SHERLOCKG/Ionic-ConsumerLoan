@@ -1,0 +1,118 @@
+import { Component, ChangeDetectorRef } from '@angular/core';
+import { NavController,AlertController,LoadingController,NavParams } from 'ionic-angular';
+
+import { CommonService } from '../http-service/common.service';
+import { HttpService } from '../http-service/http.service';
+import { ValidaService } from '../http-service/valid.service';
+import { fadeIn } from '../http-service/animation';
+
+import { ErrorPage } from '../error/error';
+import {PdfPage} from "../pdf/pdf";
+import { strictEqual } from 'assert';
+
+declare let customConfig: any;
+
+@Component({
+  selector: 'page-result',
+  templateUrl: 'result.html',
+  animations: [fadeIn]
+})
+export class ResultPage {
+  private refNo:string = '';
+  private loanItems = [];
+  private resultCode: string = '';
+  private loanTable: any = '';
+  private workingDay: any;
+  // private result: string = 'offered';
+  private loanOption: number;
+  private loanCheck: boolean = false;
+  private isAccept: boolean;
+  private errObj: any = {
+    loanOption: ''
+  };
+  private beaAppUrl: string;
+  private confirmMobile: string;
+  private showMobile: string;
+  constructor(
+    public navCtrl: NavController,
+    public loading: LoadingController,
+    public alertCtrl: AlertController,
+    public cdRef: ChangeDetectorRef,
+    public commonService: CommonService,
+    public navParam: NavParams,
+    public httpService: HttpService,
+    public validService: ValidaService
+  ) { }
+  ionViewDidLoad() {
+    this.confirmMobile = customConfig.confirmMobile;
+    this.showMobile = customConfig.showMobile;
+    this.beaAppUrl = customConfig.beaAppUrl;
+    let comfirmDetail = this.navParam.get('comfirmDetail');
+    this.loanTable = comfirmDetail.dataInfo;
+    this.resultCode = comfirmDetail.resultCode;
+    this.workingDay = comfirmDetail.workingDay;
+    this.refNo = comfirmDetail.refNo;
+    this.loanTable.length == 1 && (this.loanOption = this.loanTable[0].key);
+  }
+
+  showAlertWithCallFun(platForm) {
+    const msg = '本行並不管控、及不為連接的第三方網站的內容或其所含的其他超連結負上任何責任。因此，本行不會就連接的第三方網站的內容或其所含的其他超連結作任何保證及陳述，不論明示或暗示，及不會就任何使用或倚賴連接的第三方網站所含或透過其接收的任何信息、資料、產品或服務所引起的損害或損失負上任何責任。包含在內的任何超連結並不代表本行已認可、審查或驗證連接的第三方網站或其包括的訊息。本行的私隱政策並不適用於連接的第三方網站。 閣下瀏覽連接的第三方網站前，應參閱有關‎使用條款及適用的私隱政策。';
+    let prompt = this.commonService.comfirmModel('涉及第三方網站的免責聲明', msg, 
+      '取消', ()=> {}, 
+      '確認', ()=> {
+        if (platForm == "FB") {
+          window.open('http://www.facebook.com/sharer.php?u='+encodeURIComponent(customConfig.shareFB), 'newWindow', 'center');                        
+        } else if (platForm == "WA") {
+          window.location.href = "whatsapp://send?text=" + customConfig.shareWA;
+        }
+      }
+    );
+    prompt.present();
+  }
+
+  saveAnext(isAccept) {
+    this.errObj = {};
+    this.cdRef.markForCheck();
+    this.cdRef.detectChanges();
+    if(isAccept && !this.loanCheck ) {
+      this.errObj.loanOption = this.validService.isEmpty(this.loanOption, '請選擇貸款方案');
+    }
+    if(this.errObj.loanOption) return;
+    this.httpService.sendData = {
+      "isAccept": isAccept,
+      "key": this.loanOption
+    }
+    let loading = this.commonService.loadingModel('');
+    loading.present();
+    this.httpService.httpRequest('doneService', this.httpService.sendData).then((res) => {
+      loading.dismiss().then(()=>{
+        if(res.status == "success") {
+          this.resultCode = res.resultInfo.resultCode;
+          this.loanTable = res.resultInfo.dataInfo;
+          this.workingDay = res.resultInfo.workingDay;
+          this.refNo = res.resultInfo.refNo;
+        }
+      })
+    }).catch((res) => {
+      this.toErrorPage(res.statusText, loading);
+    });
+  }
+
+  moneyFormat(value: number) {
+    return value ? '$' + value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1' + ',') : '';
+  }
+
+  calculate(item) {
+    return ((1 + item.tenor*item.monthRate)*(1 + item.arrange*item.tenor/12)*item.principal/item.tenor).toFixed(2);
+  }
+
+  toErrorPage(errMsg, loader?: any) {
+    loader? (loader.dismiss().then(()=> {this.navCtrl.setRoot(ErrorPage, {errMsg: errMsg})})):this.navCtrl.setRoot(ErrorPage, {errMsg: errMsg});
+  }
+  toPDF(url) {
+      let src = customConfig.pdfUrl[url.toString()];
+      this.navCtrl.push(PdfPage, {
+          pdfUrl: src
+      });
+  }
+}

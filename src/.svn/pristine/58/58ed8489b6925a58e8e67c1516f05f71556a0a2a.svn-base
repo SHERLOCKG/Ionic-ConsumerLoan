@@ -1,0 +1,87 @@
+<ion-header color="bea" *ngIf="commonService.isWebset">
+  <ion-navbar class="bea-header" hideBackButton></ion-navbar>
+</ion-header>
+
+<ion-content>
+  <div class="result-pic">
+    <!-- <ion-icon *ngIf="resultCode != 'cln_0003'" name="checkmark-circle"></ion-icon> -->
+    <img src="assets/imgs/check_old.png" *ngIf="resultCode == 'cln_0001' || resultCode == 'cln_0004'" />
+    <img src="assets/imgs/call.png" *ngIf="resultCode == 'cln_0002' || resultCode == 'cln_0005'" />
+  </div>
+  <div *ngIf="resultCode == 'cln_0001'" class="approved">
+    <p style="font-weight: bold;font-size: 2.4rem;">APPROVED</p>
+    <p style="font-size: 1.6rem;opacity: 0.6;">你的申請已成功初步批核！</p>
+  </div>
+  
+  <div *ngIf="resultCode == 'cln_0005'" class="pending-text">
+    <p>多謝你的申請！我們於1個工作天內聯絡你跟進。</p>
+    <div class="refer-code">參考編號：{{ refNo }}</div>
+  </div>
+
+  <div *ngIf="resultCode == 'cln_0004'" class="offered">根據你輸入的資料，經審批后我們可提供以下貸款方案給你選擇：</div>
+  <div *ngIf="resultCode == 'cln_0004'" style="margin-left: 1rem;">請選擇：</div>
+  <div *ngIf="resultCode == 'cln_0001' || resultCode == 'cln_0004'" class="result-text" [ngClass]="{'two-part': loanTable.length == 1}">
+    <div class="result-data device-sm">
+      <div class="flex_title">
+        <div class="two-left">  
+            <span *ngIf="resultCode == 'cln_0004'" style="margin-bottom: .6rem;"><br /></span>
+            <span>貸款額</span>
+            <span>還款期</span>
+            <span>貸款手續費</span>
+            <span>總貸款額</span>
+            <span>每月平息</span>
+            <span>實際年利率</span>
+            <span>每月還款額</span>
+        </div>
+      </div>
+      <div class="flex_boxes" *ngFor="let item of loanTable">
+        <div class="checkbox-icon-box" *ngIf="resultCode == 'cln_0004'" (click)="loanOption = item.key;loanCheck = true;errObj.loanOption = ''">
+          <span><i class="checkbox-icon" [ngClass]="{'checked': loanOption == item.key}"></i></span>
+          <span style="font-size: 1.4rem">選擇{{item.key}}</span>
+        </div>
+        <div class="flex_detail">
+          <span>{{ moneyFormat(item.loanAmount) }}</span>
+          <span>{{ item.refundTime }}個月</span>
+          <span>{{ moneyFormat(item.handleCharge) || '-'}}</span>
+          <span>{{ moneyFormat(item.totalAmount) }}</span>
+          <span>{{ (item.mir * 100).toFixed(3) }}%</span>
+          <span>{{ (item.apr * 100).toFixed(2) }}%</span>
+          <span>{{ moneyFormat(item.repayAmount) }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+    
+  <div class="refer-date" *ngIf="resultCode == 'cln_0001'">我們將於X個工作天將貸款存入你戶口！</div>
+  <div class="refer-code" *ngIf="resultCode == 'cln_0001' || resultCode =='cln_0004'">參考編號：{{ refNo }}</div>
+  <div class="rule-text" *ngIf="resultCode == 'cln_0001'">
+    *本行保留最終權利批核或拒接此貸款申請而不須提供原因。<br />本行可決定客戶最終獲批核之貸款額、還款期及息率，并有絕對的自主權。
+  </div>
+
+  <div *ngIf="resultCode == 'cln_0004'" class="btn-group form-item">
+    <div class="show-err" *ngIf="errObj.loanOption" (click)="errObj.loanOption = ''" @fadeIn>{{errObj.loanOption}}</div>
+    <button class="btn" (click)="saveAnext(true)"><p>接受上述貸款條款</p></button>
+    <p class="set-margin"></p>
+    <button class="btn" (click)="saveAnext(false)"><p>不接受</p></button>
+  </div>
+  <div *ngIf="resultCode == 'cln_0002'" class="pending-text">
+    <p>多謝你的申請！我們的貸款專員於下1個工作天通知你。</p>
+    <div class="refer-code">參考編號：{{ refNo }}</div>
+  </div>
+  <div *ngIf="resultCode == 'cln_0003'" class="fail-text">
+    <p>很抱歉！</p>
+    <p>你的申請未能獲得批核。</p>
+    <div class="refer-code">參考編號：{{ refNo }}</div>
+  </div>
+  <div class="apply-tips" *ngIf="resultCode != 'cln_0003'">
+    <p>即時推薦你朋友申請東亞銀行私人貸款！</p>
+    <p>
+      <img src="assets/imgs/facebook-01.svg" alt="Facebook分享" class="img-middle" (click)="showAlertWithCallFun('FB')">
+      <img src="assets/imgs/whatsapp-01.svg" alt="WhatApp分享" (click)="showAlertWithCallFun('WA')">
+    </p>
+    <p>如有查詢請致電個人貸款熱線</p>
+    <!-- <p>2186 1515</p> -->
+    <a href="tel:21861515" class="font-black">2186 1515</a>
+  </div>
+  <div class="back-app" *ngIf="!commonService.isWebset">請按<a [href]="beaAppUrl"><img src="assets/imgs/bea-app.jpeg" /></a>返回BEA App</div>
+</ion-content>

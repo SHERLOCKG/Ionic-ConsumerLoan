@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <title>&#31169;&#20154;&#36024;&#27454;</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="msapplication-tap-highlight" content="no">
+  <meta property="og:url" content="https://www.hkbea.com/">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="assets/imgs/bea-app.jpeg">
+  <meta property="og:title" content="東亞銀行勁快分期貸款，無須現身，現金一天到手！">
+  <meta property="og:description" content="即按 www.hkbea.com/iloan 申請勁快分期貸款，專享實際年利率低至2.70%。受條款約束。">
+  <link rel="icon" type="image/x-icon" href="assets/icon/favicon.png">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#4e8ef7">
+  <script src="https://app.trustev.com/api/v2.0/TrustevJS?key=68bda4d018c34b38977812b7a7367310"></script>
+  <link href="build/main.css" rel="stylesheet">
+</head>
+<body>
+  <ion-app></ion-app>
+  <script src="build/polyfills.js"></script>
+  <script src="build/vendor.js"></script>
+  <script src="assets/js/pdf.js"></script>
+  <script src="assets/js/configs.js"></script>
+  <script src="assets/js/isMobile.js"></script>
+  <script src="build/main.js"></script>
+</body>
+</html>

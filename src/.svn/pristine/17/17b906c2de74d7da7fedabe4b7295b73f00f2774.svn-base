@@ -1,0 +1,64 @@
+page-page5 {
+  ion-content {
+    text-align: center;
+    .bank {
+      text-align: center;
+      border: 1px solid #EEE;
+      height: 2.2rem;
+      border-radius: .2rem;
+      margin-top: .6rem;
+    }
+    .bankNo {
+      width: 4rem;
+      margin-right: .5rem;
+    }
+    .bankCount {
+      width: 12rem;
+      margin-left: .5rem;
+    }
+    .relativeList {
+      display: -webkit-box;
+    }
+    .break-word {
+      width: 80%;
+      white-space: normal;
+      word-wrap: break-word;
+    }
+    .noted {
+      .t12 {
+        margin-top: 12px;
+      }
+      p {
+        text-align: left;
+      }
+    }
+  }
+  .show-bank {
+    margin-left: 16px;
+    padding: .8rem 0;
+    text-align: left;
+    border-bottom: 0.55px solid #c8c7cc;
+  }
+  ion-label {
+    max-width: 100% !important;
+    white-space: inherit;
+  }
+
+  .item-block {
+    min-height: 0rem;
+  }
+  .relative-box {
+    .item-cover {
+      width:88%;
+    }
+  }
+  .checkbox-icon-box {
+    margin-top: .8rem;
+    span {
+      vertical-align: top;
+    }
+  }
+  .float-r {
+    margin-left: 6rem;
+  }
+}

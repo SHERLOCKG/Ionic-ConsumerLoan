@@ -1,0 +1,31 @@
+var root = this;
+var customConfig = function(obj) {
+    if (obj instanceof customConfig) return obj;
+    if (!(this instanceof customConfig)) return new customConfig(obj);
+};
+if (typeof exports !== 'undefined') {
+    if (typeof module !== 'undefined' && module.exports) {
+        exports = module.exports = customConfig;
+    }
+    exports.customConfig = customConfig;
+} else {
+    root.customConfig = customConfig;
+}
+customConfig.picUpload = '/FileUpload/picUploadService';
+customConfig.picGetToken = '/FileUpload/getFileUploadToken';
+customConfig.redirectURL = 'https://www.hkbea.com/html/tc/personal-banking-consumer-loan-instalment-tax-loan.html';
+customConfig.isRedirect = true;
+customConfig.maxFileSize = 10;
+customConfig.pageTimeout = 30;
+customConfig.requestTimeout = 1;
+customConfig.isWebview = true;      /* True 表示东亚头部    False 表示不带东亚头部 */
+customConfig.shareFB = 'www.hkbea.com/taxloan';
+customConfig.shareWA = '立即前往 www.hkbea.com/taxloan 申請東亞銀行「稅貸同盟」私人貸款，專享特低息率及高達$1,100現金回贈。受條款約束。';
+customConfig.videoUrl = 'https://d1e8euzdi9wou2.cloudfront.net/ConsumerLoanVideo.mp4';
+customConfig.pdfUrl = {
+    "tnc": "./assets/pdf/CLN_DDA_T&C.pdf",
+    "authorize": "./assets/pdf/CLN_DDA.pdf",
+    "dat": "./assets/pdf/CLN_DEC.pdf",
+    "tnctln": "./assets/pdf/pdf/CLN_T&C.pdf",
+    "ca": "./assets/pdf/eKYC-TU-consent.pdf"
+};

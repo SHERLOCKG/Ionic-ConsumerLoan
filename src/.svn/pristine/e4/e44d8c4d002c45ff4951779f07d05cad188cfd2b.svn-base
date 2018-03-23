@@ -1,0 +1,132 @@
+import { Injectable } from "@angular/core";
+import { Http} from '@angular/http';
+
+import 'rxjs/add/operator/toPromise';
+import 'rxjs/add/operator/timeout';
+declare let customConfig: any;
+
+@Injectable()
+export class HttpService {
+    userType: string = 'TC';
+    sendData: object;
+    isHK: boolean = false;
+    isHomeWork: boolean = false;
+
+    private service:object;
+    private localService:object;
+
+    constructor(public http: Http) {
+        this.service = {
+            "updateinfoservice": "/tln_app/updateinfoservice",
+            "getrateservice": "/tln_app/getRateService",
+            "gethomeservice": "/tln_app/getHomeService",
+            "checkcookieservice": "/tln_app/checkcookieservice",
+            "docontinueservice": "/tln_app/docontinueservice",
+            "applyservice":"/tln_app/applyservice",
+            "sendsmsservice":"/tln_app/sendsmsservice",
+            "checksmsservice":"/tln_app/checksmsservice",
+            "getpictureservice": "/tln_app/getpictureservice",
+            "deletepictureservice":"/tln_app/deletepictureservice",
+
+            "getpage3selectservice": "/tln_app/getpage3selectservice",
+            "getgenderservice": "/tln_app/getGenderService",
+            "getmarriageservice": "/tln_app/getMarriageService",
+            "getnationalityservice":"/tln_app/getNationalityService",
+            "getareaservice":"/tln_app/getAreaService",
+            "geteducationservice": "/tln_app/getEducationService",
+
+            "getpage4selectservice": "/tln_app/getpage4selectservice",
+            "getbankcodeservice": "/tln_app/getBankCodeService",
+            "getoccupationservice": "/tln_app/getOccupationService",
+
+            "getrelationservice": "/tln_app/getrelationservice",
+
+            "showcompleteinfoservice":"/tln_app/showcompleteinfoservice",
+            "confirminfoservice":"/tln_app/confirminfoservice",
+            "checkcountservice":"/tln_app/checkcountservice",
+            "checkcontinueservice": "/tln_app/checkcontinueservice",
+            "listcompleteinfoservice":"/tln_app/listcompleteinfoservice",
+            "getimagedataservice": "/tln_app/getimagedataservice",
+            "checkdeviceservice": "/tln_app/checkdeviceservice",
+            "getfileuploadtoken": "/tln_app/getFileUploadToken",
+            "doneService": "/tln_app/doneService",
+
+            "callEKYC": "/tln_app/ekycService",
+            "checkHKIDService":"/tln_app/judBeaCustService"
+        };
+        this.localService = {
+            "updateinfoservice": "assets/updateinfoservice.json",
+            "getrateservice": "assets/getRateService.json",
+            "gethomeservice": "assets/getHomeService.json",
+            "checkcookieservice": "assets/checkcookieservice.json",
+            "docontinueservice": "assets/docontinueservice.json",
+            "applyservice":"assets/applyservice.json",
+            "sendsmsservice":"assets/sendsmsservice.json",
+            "checksmsservice":"assets/checksmsservice.json",
+            "getpictureservice": "assets/getPictureService.json",
+            "deletepictureservice":"assets/deletepictureservice.json",
+
+            "getpage3selectservice": "assets/getPage3SelectService.json",
+            "getgenderservice": "assets/getGenderService.json",
+            "getmarriageservice": "assets/getMarriageService.json",
+            "getnationalityservice":"assets/getNationalityService.json",
+            "getareaservice":"assets/getAreaService.json",
+            "geteducationservice": "assets/getEducationService.json",
+
+            "getpage4selectservice": "assets/getPage4SelectService.json",
+            "getbankcodeservice": "assets/getBankCodeService.json",
+            "getoccupationservice": "assets/getOccupationService.json",
+
+            "getrelationservice": "assets/getRelationService.json",
+
+            "showcompleteinfoservice":"assets/showcompleteinfoservice.json",
+            "confirminfoservice":"assets/confirminfoservice.json",
+            "checkcountservice":"assets/checkcountservice.json",
+            "checkcontinueservice": "assets/checkcontinueservice.json",
+            "listcompleteinfoservice":"assets/listcompleteinfoservice.json",
+            "getimagedataservice": "assets/getimagedataservice.json",
+            "checkdeviceservice": "assets/checkdeviceservice.json",
+            "getfileuploadtoken": "assets/getFileUploadToken.json",
+            "doneService": "assets/doneService.json",
+
+            "callEKYC":"assets/callEKYC.json",
+            "checkHKIDService":"assets/checkHKIDService.json",
+        };
+    }
+
+    setData(data){
+        this.sendData = data;
+    }
+    
+    httpRequest(service:string, sendData ?: object): Promise<any> {
+        console.log(JSON.stringify(sendData));
+        return this.http.post(this.service[service],JSON.stringify(sendData))
+        // return this.http.get(this.localService[service])
+            .timeout(customConfig.requestTimeout*60*1000)
+            .toPromise()
+            .then(response => response.json())
+            .catch(this.handleError);
+    }
+
+    imgUpload(data): Promise<any> {
+        return this.http.post(customConfig.picUpload, JSON.stringify(data))
+        // return this.http.get("assets/uploadpic.json",JSON.stringify(data))
+            .timeout(customConfig.requestTimeout*60*1000)
+            .toPromise()
+            .then(response => response.json())
+            .catch(this.handleError);
+    }
+
+    imgToken(): Promise<any> {
+        return this.http.post(customConfig.picGetToken, '')
+        // return this.http.get("assets/getFileUploadToken.json",'')
+            .timeout(customConfig.requestTimeout*60*1000)
+            .toPromise()
+            .then(response => response.json())
+            .catch(this.handleError);
+    }
+
+    private handleError(error: any): Promise<any> {
+        return Promise.reject(error.message || error);
+    }
+}

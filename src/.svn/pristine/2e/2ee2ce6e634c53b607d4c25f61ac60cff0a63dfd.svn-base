@@ -1,0 +1,148 @@
+{
+    "status":"success",
+    "message":"",
+    "errorCode":"",
+    "resultInfo": [
+    
+    
+
+
+    {
+      "fee": 0,
+      "to": 49999.00,
+      "loanType": "12158",
+      "apr": 0.0816,
+      "mir": 0.0035,
+      "promotionCode": "0864",
+      "code": "CLN1_24",
+      "from": 5000,
+      "key": 24
+    }, {
+      "fee": 0,
+      "to": 499999.00,
+      "loanType": "12158",
+      "apr": 0.0581,
+      "mir": 0.0025,
+      "promotionCode": "0864",
+      "code": "CLN1_24",
+      "from": 50000,
+      "key": 24
+    }, {
+      "fee": 0,
+      "to": 1200000.00,
+      "loanType": "12158",
+      "apr": 0.0402,
+      "mir": 0.00179,
+      "promotionCode": "0864",
+      "code": "CLN1_24",
+      "from": 500000,
+      "key": 24
+    }, 
+    
+    
+    
+    
+    
+    {
+      "fee": 0,
+      "to": 49999.00,
+      "loanType": "12158",
+      "apr": 0.0816,
+      "mir": 0.0035,
+      "promotionCode": "0864",
+      "code": "CLN1_36",
+      "from": 5000,
+      "key": 36
+    },{
+      "fee": 0,
+      "to": 499999.00,
+      "loanType": "12158",
+      "apr": 0.0583,
+      "mir": 0.0025,
+      "promotionCode": "0864",
+      "code": "CLN1_36",
+      "from": 50000,
+      "key": 36
+    }, {
+      "fee": 0,
+      "to": 1200000.00,
+      "loanType": "12158",
+      "apr": 0.0403,
+      "mir": 0.0179,
+      "promotionCode": "0864",
+      "code": "CLN1_36",
+      "from": 500000,
+      "key": 36
+    }
+    
+    
+    
+    
+    
+    ,{
+      "fee": 0,
+      "to": 49999.00,
+      "loanType": "12158",
+      "apr": 0.0812,
+      "mir": 0.0035,
+      "promotionCode": "0864",
+      "code": "CLN1_48",
+      "from": 5000,
+      "key": 48
+    },{
+      "fee": 0,
+      "to": 499989.00,
+      "loanType": "12158",
+      "apr": 0.0582,
+      "mir": 0.0025,
+      "promotionCode": "0864",
+      "code": "CLN1_48",
+      "from": 50000,
+      "key": 48
+    }, {
+      "fee": 0,
+      "to": 1200000.00,
+      "loanType": "12158",
+      "apr": 0.0404,
+      "mir": 0.0179,
+      "promotionCode": "0864",
+      "code": "CLN1_48",
+      "from": 500000,
+      "key": 48
+    }
+    
+    
+    
+    
+    ,{
+      "fee": 0,
+      "to": 49999.00,
+      "loanType": "12158",
+      "apr": 0.0805,
+      "mir": 0.0035,
+      "promotionCode": "0864",
+      "code": "CLN1_72",
+      "from": 5000,
+      "key": 60
+    }, {
+      "fee": 0,
+      "to": 499999.00,
+      "loanType": "12158",
+      "apr": 0.0579,
+      "mir": 0.0025,
+      "promotionCode": "0864",
+      "code": "CLN1_72",
+      "from": 50000,
+      "key": 60
+    }, {
+      "fee": 0,
+      "to": 1200000.00,
+      "loanType": "12158",
+      "apr": 0.0405,
+      "mir": 0.0179,
+      "promotionCode": "0864",
+      "code": "CLN1_72",
+      "from": 500000,
+      "key": 60
+    }]
+  }

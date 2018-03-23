@@ -1,0 +1,16 @@
+{
+  "status":"success",
+  "message":"",
+  "errorCode":"",
+  "resultInfo": {
+    "mobileNo": "98765432",
+    "email": "123@gmail.com",
+    "id": "123",
+    "continue": true,
+    "unexist": false,
+    "productCode": "TC1",
+    "loanPurpose": "Tax Payment",
+    "loanAmount": "5000",
+    "refundTime": "12"
+  }
+}

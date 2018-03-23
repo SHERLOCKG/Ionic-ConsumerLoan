@@ -1,0 +1,13 @@
+{
+    "status":"success",
+    "message":"",
+    "errCode":"",
+    "resultInfo": {
+        "loanAmount": "5000",
+        "refundTime": "12",
+        "loanPurpose": "1",
+        "mobileNo": "98765432",
+        "email": "123@gmail.com"
+    }
+  }
+  

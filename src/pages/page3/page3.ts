@@ -1,0 +1,282 @@
+import { Component, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { NavController, AlertController, LoadingController, Content,NavParams } from 'ionic-angular';
+
+import { Page4 } from '../page4/page4';
+import { ErrorPage } from '../error/error';
+import { HttpService } from '../http-service/http.service'
+
+import { ValidaService } from '../http-service/valid.service';
+import { CommonService } from '../http-service/common.service';
+
+import { fadeIn } from '../http-service/animation';
+
+@Component({
+  selector: 'page-page3',
+  templateUrl: 'page3.html',
+  animations: [fadeIn]
+})
+export class Page3 {
+  @ViewChild(Content) content: Content;
+  @ViewChild('gender') gender: any;
+  @ViewChild('surName') surName: any;
+  @ViewChild('name') name: any;
+  // @ViewChild('mobileNo') mobileNo: any;
+  @ViewChild('otherType') otherType: any;
+  @ViewChild('otherCountry') otherCountry: any;
+  @ViewChild('otherNum') otherNum: any;
+  @ViewChild('houseMobileNo') houseMobileNo: any;
+  @ViewChild('nationality') nationality: any;
+  @ViewChild('marriage') marriage: any;
+  @ViewChild('education') education: any;
+  @ViewChild('liveStatus') liveStatus: any;
+  @ViewChild('liveCost') liveCost: any;
+  @ViewChild('flat') flat: any;
+  @ViewChild('floor') floor: any;
+  @ViewChild('block') block: any;
+  @ViewChild('garden') garden: any;
+  @ViewChild('street') street: any;
+  @ViewChild('area') area: any;
+  @ViewChild('liveYear') liveYear: any;
+
+  private personInfo = {
+    fullBirthday: '',
+    idCardPref: '',
+    idCardSuf: ''
+  };
+
+  personInfoTitle = {
+    gender: "稱謂：",
+    surName: "英文姓氏：",
+    name: "英文名字：",
+    fullBirthday: "出生日期：",
+    idCardPref: "香港身份證：",
+    idCardSuf: "最後一位",
+    // mobileNo: "手提電話：",
+    otherType: '其他身份證明文件類別：',
+    otherCountry: '其他護照簽發國家：',
+    otherNum: '其他身份證明文件號碼：',
+    houseMobileNo: "住宅電話：",
+    nationality: "國籍：",
+    marriage: "婚姻狀況：",
+    education: "教育程度：",
+    liveStatus: "居住狀況：",
+    liveCost1:"申請人負責之每月租金(港幣)：",
+    liveCost2:"申請人負責之每月供款(港幣)：",
+    flat: "室：",
+    floor: "樓：",
+    block: "座：",
+    garden: "大廈/屋苑：",
+    street: "街道：",
+    area: "地區：",
+    liveYear: "居住年期："
+  };
+  private errObj: any = {};
+  private genderOpItem = [];
+  private nationalityOpItem = [];
+  private marriageOpItem = [];
+  private educationOpItem = [];
+  private liveStatusOpItem = [
+    {"value": "Living with Parents", "nameEN": "", "nameTC": "與父母同住", "nameSC": ""},
+    {"value": "Quarters", "nameEN": "", "nameTC": "宿舍", "nameSC": ""},
+    {"value": "Owned", "nameEN": "", "nameTC": "自置", "nameSC": ""},
+    {"value": "Rented", "nameEN": "", "nameTC": "租用", "nameSC": ""},
+    {"value": "Mortgaged", "nameEN": "", "nameTC": "按揭", "nameSC": ""}
+  ];
+  private otherTypeOpItem = [
+    {"value": "HK Id", "nameEN": "", "nameTC": "香港特別行政區簽證身份書", "nameSC": ""},
+    {"value": "Passport", "nameEN": "", "nameTC": "護照", "nameSC": ""},
+    {"value": "HK and Macao", "nameEN": "", "nameTC": "往來或前往(單程證)港澳通行證", "nameSC": ""},
+  ]
+  private areaList = [];
+  private liveYearList = [];
+  private maxYear: number = 2000;
+  isBeaUser:boolean;
+  showMobile: boolean = true;
+  constructor(
+    public navCtrl: NavController,
+    public navPas: NavParams,
+    private cdRef: ChangeDetectorRef,
+    private httpService: HttpService,
+    public alertCtrl: AlertController,
+    public loading: LoadingController,
+    private validaService: ValidaService,
+    private commonService: CommonService
+  ) {}
+
+  ionViewWillLoad(){
+    this.isBeaUser = this.navPas.get("isBeaUser");
+    this.maxYear = (new Date()).getFullYear() - 18;
+    let loading = this.commonService.loadingModel('');loading.present();
+    Promise.all([
+      this.httpService.httpRequest('getpage3selectservice'),
+      this.httpService.httpRequest('updateinfoservice',  this.httpService.sendData)
+    ]).then(([select, update]) => {
+      loading.dismiss().then(() => {
+        if ((select.status + update.status) == 'success'.repeat(2)) {
+          let selectInfo = select.resultInfo;
+          this.genderOpItem = selectInfo.genderOpItem;
+          this.marriageOpItem = selectInfo.marriageOpItem;
+          this.nationalityOpItem = selectInfo.nationalityOpItem;
+          this.areaList = selectInfo.areaList;
+          this.commonService.areaService = selectInfo.areaList;
+          this.educationOpItem = selectInfo.educationOpItem;
+          let dataInfo = update.resultInfo;
+          this.gender.inputValue = dataInfo.gender;
+          this.surName.inputValue = dataInfo.surName;
+          this.name.inputValue = dataInfo.name;
+          this.personInfo.fullBirthday = dataInfo.fullBirthday;
+          this.personInfo.idCardPref = dataInfo.idCardPref;
+          this.personInfo.idCardSuf = dataInfo.idCardSuf;
+          // this.mobileNo.inputValue = dataInfo.mobileNo;
+          if (!this.httpService.isHK) {
+            this.otherType.inputValue = dataInfo.otherType;
+            this.otherCountry.inputValue = dataInfo.otherCountry;
+            this.otherNum.inputValue = dataInfo.otherNum;
+          }
+          this.houseMobileNo.inputValue = dataInfo.houseMobileNo;
+          // if (this.houseMobileNo.inputValue) {
+          //   this.showMobile = true;
+          // }
+          this.nationality.inputValue = dataInfo.nationality;
+          this.marriage.inputValue = dataInfo.marriage;
+          this.education.inputValue = dataInfo.education;
+          this.liveStatus.inputValue = dataInfo.liveStatus;
+          setTimeout(() => {
+            (dataInfo.liveStatus == "Rented" || dataInfo.liveStatus == "Mortgaged") && (this.liveCost.inputValue = dataInfo.liveCost);
+          },0);
+          this.flat.inputValue = dataInfo.flat;
+          this.floor.inputValue = dataInfo.floor;
+          this.block.inputValue = dataInfo.block;
+          this.garden.inputValue = dataInfo.garden;
+          this.street.inputValue = dataInfo.street;
+          this.area.inputValue = dataInfo.area;
+          this.liveYear.inputValue = dataInfo.liveYear;
+          this.personInfo.fullBirthday = this.validaService.isBiDay(update.resultInfo.fullBirthday);
+          // 居住年期数组生成
+          this.liveYearList = this.commonService.getYearList(30, 11);
+        } else {
+          this.toErrorPage((select.message || update.message));
+        }
+      })
+    }).catch(res => {
+      this.toErrorPage(res, loading);
+    });
+  }
+
+  toErrorPage(errMsg, loader?: any) {
+    loader.dismiss().then(() => {
+        this.navCtrl.setRoot(ErrorPage, {
+            errMsg: errMsg
+        });
+    });
+  }
+
+  saveAnext(){
+    this.errObj = {};
+    this.cdRef.markForCheck();
+    this.cdRef.detectChanges();
+    this.errObj.gender = this.validaService.isEmpty(this.gender.inputValue, '請選擇稱謂');
+    this.errObj.surName = this.validaService.isEngName(this.surName.inputValue,'請填寫英文姓氏','英文姓氏填寫不正確');
+    this.errObj.name = this.validaService.isEngName(this.name.inputValue, '請填寫英文名字','英文名字填寫不正確');
+    this.errObj.fullBirthday = this.validaService.isEmpty(this.personInfo.fullBirthday, '請選擇出生日期');
+    this.errObj.idCard = this.validaService.ckHKID(this.personInfo.idCardPref, this.personInfo.idCardSuf);
+    if (!this.httpService.isHK) {
+      this.errObj.otherType = this.validaService.isEmpty(this.otherType.inputValue, '請選擇證明文件');
+      this.errObj.otherCountry = this.validaService.isEmpty(this.otherCountry.inputValue, '請選擇護照簽發國家');
+      this.errObj.otherNum = this.validaService.isIDNum(this.otherNum.inputValue, '請填寫其他身份證明文件號碼', '其他身份證明文件號碼不正確');
+    }
+    // this.errObj.mobileNo = this.validaService.isMobile(this.mobileNo.inputValue,'請填香港手提電話號碼','號碼需以5/6/8/9開頭，且不小於8位');
+    this.errObj.houseMobileNo = this.validaService.isMobile(this.houseMobileNo.inputValue,'請填寫香港住宅電話號碼','號碼不正確，且不小於8位');
+    this.errObj.nationality = this.validaService.isEmpty(this.nationality.inputValue, '請選擇國籍');
+    this.errObj.marriage = this.validaService.isEmpty(this.marriage.inputValue, '請選擇婚姻狀況');
+    this.errObj.education = this.validaService.isEmpty(this.education.inputValue, '請選擇教育程度');
+    this.errObj.liveStatus = this.validaService.isEmpty(this.liveStatus.inputValue, '請選擇居住狀況');
+    this.liveStatus.inputValue == 'Rented' && (this.errObj.liveCost = this.validaService.isNumber(this.liveCost.inputValue, '每月租金填寫不正確','請填寫每月租金'));
+    this.liveStatus.inputValue == 'Mortgaged' && (this.errObj.liveCost = this.validaService.isNumber(this.liveCost.inputValue, '每月供款填寫不正確','請填寫每月供款'));
+    this.errObj.flat = this.validaService.isEngRoom(this.flat.inputValue, '室填寫不正確');
+    this.errObj.floor = this.validaService.isEngRoom(this.floor.inputValue, '樓填寫不正確');
+    this.errObj.block = this.validaService.isEngRoom(this.block.inputValue, '座填寫不正確');
+    if (!this.flat.inputValue && !this.floor.inputValue && !this.block.inputValue) {
+      this.errObj.flat = '請填寫室';
+      this.errObj.floor = '請填寫樓';
+      this.errObj.block = '請填寫座';
+    }
+    this.errObj.garden = this.validaService.isEmpty(this.garden.inputValue, '請填寫大廈/屋苑');
+    // this.errObj.street = this.validaService.isEmpty(this.street.inputValue, '請填寫街道');
+    this.errObj.area = this.validaService.isEmpty(this.area.inputValue, '請選擇地區');
+    this.errObj.liveYear = this.validaService.isEmpty(this.liveYear.inputValue, '請選擇居住年期');
+    let isRightToNext = this.commonService.scrollTo(this.content,this.errObj);
+    if (isRightToNext) {
+      let loading = this.commonService.loadingModel('');loading.present();
+      this.httpService.sendData = {
+        id: this.commonService.userId,
+        gender: this.gender.inputValue,
+        surName: this.surName.inputValue,
+        name: this.name.inputValue,
+        fullBirthday: this.personInfo.fullBirthday,
+        idCardPref: this.personInfo.idCardPref,
+        idCardSuf: this.personInfo.idCardSuf,
+        // mobileNo: this.mobileNo.inputValue,
+        otherType: !this.httpService.isHK ? this.otherType.inputValue : '',
+        otherCountry: !this.httpService.isHK ? this.otherCountry.inputValue : '',
+        otherNum: !this.httpService.isHK ? this.otherNum.inputValue : '',
+        houseMobileNo: this.houseMobileNo.inputValue,
+        nationality: this.nationality.inputValue,
+        marriage: this.marriage.inputValue,
+        education: this.education.inputValue,
+        liveStatus: this.liveStatus.inputValue,
+        liveCost: (this.liveStatus.inputValue == 'Rented' || this.liveStatus.inputValue == 'Mortgaged')? this.liveCost.inputValue:'',
+        flat: this.flat.inputValue,
+        floor: this.floor.inputValue,
+        block: this.block.inputValue,
+        garden: this.garden.inputValue,
+        street: this.street.inputValue,
+        area: this.area.inputValue,
+        liveYear: this.liveYear.inputValue
+      };
+      this.httpService.httpRequest('updateinfoservice', {id: this.commonService.userId,idCardPref: this.personInfo.idCardPref,idCardSuf: this.personInfo.idCardSuf}).then(res=>{
+        loading.dismiss().then(() => {
+          if (res.status == 'success') {
+            if (this.checkAge(this.personInfo.fullBirthday, res.resultInfo.systemTime ? res.resultInfo.systemTime : new Date())) {
+              this.navCtrl.push(Page4);
+            } else {
+              this.commonService.alertModel('注意', '很抱歉，私人貸款的申請人必須年滿18歲。','確定');
+            }
+            this.httpService.httpRequest('checkHKIDService', {
+              "idCardPref": this.personInfo.idCardPref,
+              "idCardSuf": this.personInfo.idCardSuf,
+              "isBeaUser":this.isBeaUser,
+              "step":"3",
+              "surName": this.surName.inputValue,
+              "name": this.name.inputValue
+            })
+          } else if (res.status == "fail" && res.errorCode == "err-5004") {
+            this.commonService.alertModel('注意', '你的申請已收到，請勿重新申請！','確定');
+          } else if (res.status == "fail" && res.errorCode == "err-2016") {
+            this.errObj = {};
+            this.cdRef.markForCheck();
+            this.cdRef.detectChanges();
+            this.errObj.idCard = '香港身份證號碼填寫不正確';
+            this.commonService.scrollTo(this.content,this.errObj);
+          } else {
+            this.toErrorPage(res.statusText);
+          }
+        })
+      }).catch((res) => {
+        this.toErrorPage(res.statusText, loading);
+      })
+    }
+  }
+
+  scrollTo(elementId: string) {
+    let yOffset = document.getElementById(elementId).offsetTop;
+    this.content.scrollTo(0, yOffset, 500);
+  }
+
+  checkAge(smallDate, bigDate) {
+    const arr = smallDate.split("-");
+    arr[0] = Number(arr[0]) + 18;
+    const newDate = arr.join("-");
+    return new Date(bigDate) >= new Date(newDate);
+  }
+}

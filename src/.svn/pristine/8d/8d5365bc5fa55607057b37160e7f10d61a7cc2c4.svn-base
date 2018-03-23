@@ -1,0 +1,10 @@
+{
+    "status":"success",
+    "message":"",
+    "errCode":"",
+    "result":true,
+    "resultInfo":{
+        "ekycResult": true
+    }
+  }
+  

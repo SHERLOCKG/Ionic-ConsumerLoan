@@ -1,0 +1,105 @@
+page-result {
+  .approved-text, .offered-text {
+    margin: 1rem 1.5rem;
+    font-size: 1.7rem;
+    line-height: 1.6;
+    font-weight: normal;
+  }
+  .result-text {
+    margin-left: 1.5rem;
+    margin-right: 1.5rem;
+    border: 1px solid #000;
+    border-radius: 10px;
+    padding: 1rem 0 1rem 1.5rem;
+  }
+  .result-data {
+    font-size: 1.5rem;
+    line-height: 1.6;
+    display: flex;
+    span {
+      display: block
+    }
+    .flex_title {
+      width: 35%;
+      min-width: 8rem;
+    }
+    .flex_detail {
+      flex: 1;
+      .flex_header {
+        font-weight: bold;
+        text-decoration: underline;
+      }
+      label {
+        vertical-align: middle;
+      }
+      input {
+        height: 1.2rem;
+        width: 1.2rem;
+        margin-right: .2rem;
+        vertical-align: middle;
+        border: 1px solid #333;
+      }
+    }
+  }
+  .refer-code {
+    margin-top: 1rem;
+    font-size: 1.5rem;
+    text-align: center;
+  }
+  .flex_header .flex_detail {
+      text-decoration: underline; 
+  }
+  .two-part .flex_title {
+    width: 45%;
+  }
+  .special{
+    color: rgba(34,177,76,1.0);
+    font-weight: bold;
+  }
+  .pending-text {
+    margin-top: 2rem;
+    p {
+      margin-bottom: 1rem;
+      padding: 0 2rem;
+    }
+  }
+  .apply-tips {
+    width: 100%;
+    margin-left: 1.5rem;
+    margin-top: 2rem;
+    text-align: left;
+    p {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    img {
+      max-height: 2.4rem;
+      max-width: 8rem;
+      vertical-align: middle;
+    }
+    .img-middle {
+      margin:  0 .3rem;
+    }
+  }
+  .btn {
+    margin-left: 1.5rem;
+    display: inline-block;
+    margin-top: 2rem;
+    background-color: red;
+    color: white;
+    width: 39%;
+    max-width: 12rem;
+    height: 4.3rem;
+    font-size: 1.6rem;
+    font-weight: bold;
+    border-radius: 0.5rem;
+  }
+  .hyper-link {
+    text-decoration: underline;
+    font-style: normal;
+  }
+  .rule-text {
+    padding: 1rem 1.5rem;
+    font-size: 1.2rem;
+  }
+}

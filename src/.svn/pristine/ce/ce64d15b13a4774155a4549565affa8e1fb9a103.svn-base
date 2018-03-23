@@ -1,0 +1,19 @@
+form-item {
+    .err-box {
+        position: absolute;
+        z-index: 9;
+        background-color: #fff;
+        left: 1rem;
+        padding: .5rem .8rem;
+        min-height: 3rem;
+        border-radius: .3rem; 
+        top: 3.2rem;
+        box-shadow: 0 2px 2px rgba(255, 0, 0, .3);
+    }
+    .un-border {
+        border-bottom: 1px solid #616161;
+    }
+    .select-item {
+        flex: 1;
+    }
+}

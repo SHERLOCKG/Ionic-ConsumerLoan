@@ -1,0 +1,13 @@
+page-error {
+  ion-content {
+    text-align: center;
+  }
+  .err-msg {
+    padding-top: 1.5rem;
+  }
+  .err-btn {
+    background: $beaRed;
+    width: 8rem;
+    height: 3rem;
+  }
+}

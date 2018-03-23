@@ -1,0 +1,10 @@
+{
+    "status":"success",
+    "message":"",
+    "errCode":"",
+    "systemTime": "2017-08-02",
+    "resultInfo":{
+      "isBeaUser": true,
+      "isHKResidents": false
+    }
+  }

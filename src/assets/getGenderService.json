@@ -1,0 +1,12 @@
+{
+    "status":"success",
+    "message":"",
+    "errCode":"",
+    "resultInfo":[
+        {"nameTC": "先生","nameEN": "MR","value": "1"},
+        {"nameTC": "太太","nameEN": "MS","value": "2"},
+        {"nameTC": "女士","nameEN": "MRS","value": "3"},
+        {"nameTC": "小姐","nameEN": "MISS","value": "4"}
+    ]
+  
+  }

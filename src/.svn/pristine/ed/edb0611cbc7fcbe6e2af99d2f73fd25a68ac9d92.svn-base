@@ -1,0 +1,68 @@
+<ion-header color="bea" *ngIf="commonService.isWebset">
+  <ion-navbar class="bea-header" hideBackButton></ion-navbar>
+</ion-header>
+
+<ion-content>
+  <header-step [step]=5 [finish]=true [isStep]=false></header-step>
+  <div *ngIf="resultCode == 'cln_0001'" class="approved-text">你的申請已成功批核！</div>
+  <h3 *ngIf="resultCode == 'cln_0004'" class="offered-text">
+    根據你提供的資料，<br />
+    我們已為你批核貸款詳情如下：
+  </h3>
+
+   <div *ngIf="resultCode == 'cln_0001' || resultCode == 'cln_0004'" class="result-text" [ngClass]="{'two-part': loanTable.length == 1}">
+      <div class="result-data">
+        <div class="flex_title">
+          <span *ngIf="loanTable.length > 1"><br /></span>
+          <span>貸款額：</span>
+          <span>還款期：</span>
+          <span><i class="hyper-link">貸款手續費</i>：</span>
+          <span>總貸款額：</span>
+          <span>每月平息：</span>
+          <span>實際年利率：</span>
+          <span class="special">每月還款額：</span>
+          <span class="special" *ngIf="loanTable.length == 1">參考編號：</span>
+        </div>
+        <div class="flex_detail" *ngFor="let item of loanTable,let idx = index">
+          <span class="flex_header" *ngIf="loanTable.length > 1"><input type="checkbox" [id]="idx"><label [for]="idx">選項 {{idx+1}}</label></span>
+          <span>{{ moneyFormat(item.loanAmount) }}</span>
+          <span>{{ item.refundTime }}個月</span>
+          <span>{{ item.handleCharge || '-'}}</span>
+          <span>{{ moneyFormat(item.loanAmount + item.handleCharge) }}</span>
+          <span>{{ (item.mir * 100).toFixed(3) }}%</span>
+          <span>{{ (item.apr * 100).toFixed(2) }}%</span>
+          <span class="special">{{ moneyFormat(item.repayAmount) }}</span>
+          <span class="special" *ngIf="loanTable.length == 1"><b>{{ refNo }}</b></span>
+        </div>
+      </div>
+      <div class="special refer-code" *ngIf="resultCode == 'cln_0001'"><b>我們將於2個工作日將貸款存入你戶口！</b></div>
+      <div class="special refer-code" *ngIf="loanTable.length > 1"><b>參考編號：{{ refNo }}</b></div>
+      <!-- X天 -->
+  </div> 
+
+  <div class="rule-text" *ngIf="resultCode == 'cln_0001'">
+    本行保留最終權利批核或拒接此貸款申請而不須提供原因。本行可決定客戶最終獲批核之貸款額、還款期及息率，并有絕對的自主權。
+  </div>
+
+  <div *ngIf="resultCode == 'cln_0004'" class="btn-group">
+    <button class="btn" (click)="saveAnext(true)">接受上述<br />貸款條款</button>
+    <button class="btn" (click)="saveAnext(false)">與我們貸款專員聯絡</button>
+  </div>
+  <div *ngIf="resultCode == 'cln_0002'" class="pending-text">
+    <p>多謝你的申請！我們將會盡快處理。</p>
+    <p class="special">申請編號：TL0J490FYFEF</p>
+  </div>
+  <div *ngIf="resultCode == 'cln_0003'" class="fail-text">
+    <p>很抱歉！</p>
+    <p>你的申請未能獲得批核。</p>
+  </div>
+  <div class="apply-tips">
+    <p>即時推薦你朋友申請東亞銀行私人貸款！</p>
+    <p>
+      <img src="assets/imgs/share-Zh.png" alt="立即分享">
+      <img src="assets/imgs/share_fb.png" alt="Facebook分享" class="img-middle" (click)="showAlertWithCallFun('FB')">
+      <img src="assets/imgs/share_wa.png" alt="WhatApp分享" (click)="showAlertWithCallFun('WA')">
+    </p>
+    <p>如有查詢，請致電個人貸款熱線<a href="tel:22111211" class="underline font-blue">22111211</a>。</p>
+  </div>
+</ion-content>

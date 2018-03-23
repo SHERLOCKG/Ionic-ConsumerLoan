@@ -1,0 +1,91 @@
+page-confirm {
+  .edit-btn {
+    font-size: 2rem;
+  }
+  .btn-change {
+    background-color:$beaOrange;
+    vertical-align: middle;
+  }
+  .btn-change.activated {
+    background-color:#f78e00;
+  }
+  ion-label {
+    max-width: 100% !important;
+    white-space: inherit;
+  }
+  .cut-line {
+    width: 32%;
+    display: inline-block;
+  }
+  ion-content {
+    text-align: center;
+  }
+  ion-list{
+    p{
+      text-align: left;
+      padding: 1rem 0px;
+    }
+    ul li{
+      text-align: left;
+    }
+  }
+  .sign-close {
+    position: absolute;
+    top: 100px;
+    font-size: 3rem;
+    right: calc((100% - 300px) / 2 + 10px);
+    right: -webkit-calc((100% - 300px) / 2 + 10px);
+  }
+  .elect-sign {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 99;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.4);
+  }
+  #canvas {
+    margin-top: 100px;
+    background: rgba(255, 255, 255, 0.8);
+    // width:300px;
+    // height:300px;
+  }
+  @media screen and (max-width: 350px) {
+    .sign-close{
+      top: 88px;
+      right: calc((100% - 250px) / 2 + 10px);
+      right: -webkit-calc((100% - 250px) / 2 + 10px);
+    }
+  }
+  .last-text {
+    margin-bottom: 8.8rem;
+  }
+  .fixed-btn {
+    position: fixed;
+    width: 100%;
+    z-index: 9;
+    bottom: 0;
+    background-color: #fff;
+  }
+  .sign-btn {
+    background-color:#8ab047;
+  }
+  .sign-btn.activated {
+    background-color:#8ab047;
+  }
+  .show-err {
+    bottom: 5rem;
+  }
+  .declaration-item {
+    ion-label {
+      display: flex;
+    }
+    input {
+      width: 6%;
+      margin-top: 0.35rem;
+    }
+    label {
+      flex: 1;
+    }
+  }
+}

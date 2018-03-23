@@ -1,0 +1,39 @@
+<ion-header color="bea" [style.display]="commonService.isWebset ? 'block' : 'none'">
+  <ion-navbar class="bea-header"></ion-navbar>
+</ion-header>
+
+<ion-content [ngClass]="{'remove-header': commonService.isWebset == false}">
+  <header-step [step]=0></header-step>
+  <ion-list id="loanInfo">
+    <ion-list-header>貸款資料</ion-list-header>
+    <div class="loanItem" style="padding-top: 20px;">
+      <label>貸款額：</label>
+      <div class="loan-amount form-item">
+        <label for="amount">HK$</label>
+        <div class="show-err" *ngIf="errObj.isRight">{{errObj.isRight}}</div>
+        <input id="amount" type="tel" (keyup)="keyUp($event)" (focus)="unFormat($event)" (blur)="iptBlur($event)" maxlength="7"/>
+      </div>
+      <ion-range class="range" [min]="amountRange.min" color="green-bg" [max]="amountRange.max" [step]="amountRange.step" [(ngModel)]="loan.currVal" (ionChange)="changeRate()"></ion-range>
+     </div>
+    <div class="loanItem">
+      <label>還款期：</label>
+      <span>{{ loan.refundTime }} 個月</span>
+      <ion-range class="range range-refund" [min]="refundRange.min" [max]="refundRange.max" [step]="refundRange.step" snaps="true" [(ngModel)]="loan.refundTime" (ionChange)="changeRate()"></ion-range>
+    </div>
+    <div class="loanPay">
+      <p>每月平息 {{(loan.mir * 100).toFixed(3)}}%</p>
+      <p>實際年利率 {{(loan.apr * 100).toFixed(2)}}%</p>
+      <!-- <p class="min-font">（不包括現金回贈）</p> -->
+      <p>每月還款額：</p>
+      <span>{{ commonService.moneyFormat((loan.currVal / loan.refundTime  + loan.currVal * loan.mir).toFixed(2)) }}</span>
+    </div>
+    <form-item #loanPur [name]="loanPurposeTitle" [errMsg]="errObj.loan" [opItem]="opItems" id="loan"></form-item>
+  </ion-list>
+  <ion-list id="selectInfo">
+    <ion-list-header>聯絡資料</ion-list-header>
+    <form-item #phone [name]="phoneTitle" [inputType]="'tel'" [errMsg]="errObj.phone" [maxLen]=8 id="phone" [isDisabled]="!commonService.canChange"></form-item>
+    <form-item #email [name]="emailTitle" [errMsg]="errObj.email" id="email" [maxLen]=40></form-item>
+  </ion-list>
+  <p class="notice">本人已參閱、明白及同意各項<a class="underline font-blue" (click)="showStatement()">重要聲明</a>。</p>
+  <button ion-button class="my-btn" (click)="saveAnext()">儲存及下一步</button>
+</ion-content>

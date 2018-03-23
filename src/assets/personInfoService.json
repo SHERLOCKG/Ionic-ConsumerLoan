@@ -1,0 +1,30 @@
+{
+    "status":"success",
+    "message":"",
+    "errCode":"",
+    "systemTime": "2017-08-02",
+    "resultInfo":{
+        "gender":"1",
+        "surName":"LEE",
+        "name":"Chan",
+        "fullBirthday":"1990-02-06",
+        "birthday":"06",
+        "birthmonth":"Feb",
+        "birthyear":"1990",
+        "mobileNo":"98765432",
+        "addrMobileNo": "90000001",
+        "idCardPref":"A123456",
+        "idCardSuf":"3",
+        "nationality":"HK",
+        "marriage": "1",
+        "education": "1",
+        "liveYear": "3",
+        "flat":"FlatA",
+        "floor":"22/F",
+        "block":"Block 6",
+        "garden":"Mary Garden",
+        "street":"Quarry Bay",
+        "area":"1 4",
+        "language":"中文"
+    }
+  }

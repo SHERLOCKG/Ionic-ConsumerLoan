@@ -1,0 +1,11 @@
+{
+    "status":"success",
+    "message":"",
+    "errCode":"",
+    "resultInfo": [
+        {"nameTC": "未婚","nameEN": "Single","value": "1"},
+        {"nameTC": "已婚","nameEN": "Married","value": "2"},
+        {"nameTC": "離婚/分居","nameEN": "Divorced/Separated","value": "3"},
+        {"nameTC": "喪偶","nameEN": "Widowed","value": "4"}
+        ]
+}

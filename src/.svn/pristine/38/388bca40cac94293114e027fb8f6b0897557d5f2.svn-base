@@ -1,0 +1,234 @@
+page-page2 {
+    .canvas {
+        display: none;
+    }
+    .err-hint:lang(En) {
+        font-size: 1rem;
+    }
+    .show-err {
+        bottom: 5rem;
+    }
+    .idcard-box {
+        width:80%;
+        display: inline-block;
+        .item-inner {
+            padding-left:16px;
+            margin-left:-16px;
+            border-bottom: 1px solid #c8c7cc!important;
+        }
+    }
+    .addStyle {
+        width:6%;
+        text-align:center;
+        display: inline-block;
+        padding:0;
+        .item-inner {
+            border-bottom: 1px solid #c8c7cc!important;
+            padding-right: 0 !important;
+            input {
+                text-align: center;
+                width: 100% !important;
+                margin-right: 0 !important;
+                padding-left: 0 !important;
+            }
+        }
+    }
+    .lefticon {
+        vertical-align: bottom;
+        padding:0;
+        min-height:3.4rem;
+        .item-inner {
+            border-bottom:0!important;
+            padding:0!important;
+        }
+        .label {
+            font-size: 2.5rem;
+            margin:0;
+            color:#c8c7cc;
+            vertical-align: bottom;
+            font-weight: 300;
+        }
+    }
+    .loading-spinner {
+        position: absolute;
+        top:50%;
+        left:50%;
+        transform: translate(-50%,-50%);
+        circle {
+            fill:#fff;
+        }
+    }
+    .float-l {
+        float: left;
+    }
+    .float-r {
+        float: right;
+    }
+    .info-icon {
+        color:#333;
+    }
+    .main {
+        width:100%;
+        text-align: center;
+        font-size: 1.4rem;
+        color:#333;
+    }
+    .agree-arrange-box {
+        position: relative;
+        margin:1.5rem auto;
+        width:100%;
+        max-width: 26.6rem;
+    }
+
+    .upload-pic {
+        position: relative;
+        display: table;
+        margin:.1rem auto;
+        padding:.2rem 9.2rem 0 4.3rem;
+        width:90%;
+        height:8rem;
+        background-color:#ccc;
+        text-align: left;
+        color:#fff;
+        background-position:.3rem center;
+        background-size: auto 4rem;
+        background-repeat: no-repeat;
+        span {
+            display: table-cell;
+            vertical-align:middle;
+            position: relative;
+        }
+        .pic-box {
+            position: absolute;
+            top:50%;
+            right:4.5rem;
+            display: inline-block;
+            width:3.5rem;
+            height:4rem;
+            transform: translateY(-50%);
+        }
+        .pic-box img {
+            max-width: 100%;
+            max-height: 100%;
+            position: absolute;
+            left: 50%;
+            top:50%;
+            transform: translate(-50%,-50%);
+        }
+        .btn-confirm {
+            position: absolute;
+            top:0;
+            right:0;
+            width:4rem;
+            height:100%;
+            color:#fff;
+            font-size: 1.4rem;
+            background-color:#ed171f;
+
+            background-image:url("../assets/imgs/upload.png");
+            background-size: auto 6rem;
+            background-repeat: no-repeat;
+            background-position:center;
+
+        }
+        .btn-confirm.btn-disabled {
+            background-color:#e1e1e1;
+            color:#fff;
+        }
+        .btn-confirm[disabled] {
+            opacity: 1;
+        }
+        .btn-confirm.selfie-color {
+            background-color:#a41a31;
+        }
+        .btn-confirm.selfie-color.btn-disabled {
+            background-color:#e1e1e1;
+            color:#fff;
+        }
+    }
+    .upload-pic.hkid {
+        background-image:url("../assets/imgs/icon_id.png");
+        background-color:#a41a31;
+    }
+    .upload-pic.passbook {
+        background-image:url("../assets/imgs/icon_passport.svg");
+        background-color:#a41a31;
+    }
+    .upload-pic.selfie {
+        background-image:url("../assets/imgs/icon_photo.png");
+        background-color:#ed171f;
+        .rotact {
+            position: absolute;
+            right: -18px;
+            top: 36%;
+            color: #fff;
+            transform: translateY(-50%);
+            width: 4.2rem;
+            height: 4rem;
+            font-size: 1rem;
+            background: transparent;
+            img {
+                width: 3rem;
+            }
+            p {
+                text-align: center;
+                line-height: 0;
+            }
+        }
+    }
+    .upload-pic.salary {
+        background-image:url("../assets/imgs/icon_salary.png");
+        background-color:#a41a31;
+    }
+    .upload-pic:first-child {
+        margin-top:2rem;
+    }
+    .btn-add {
+        position: absolute;
+        top:45%;
+        right:4rem;
+        transform: translateY(-50%);
+        width:4.6rem;
+        background-color:transparent;
+        color:#fff;
+        ion-icon {
+            font-size: 3.4rem;
+            color:#fff;
+        }
+    }
+    .has-pic {
+        opacity: 0;
+    }
+    .del-icon {
+        position: absolute;
+        left: 50%;
+        top: 135%;
+        font-size: 1.3em;
+        font-weight: 600;
+        -webkit-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+    }
+    .del-disabled {
+        opacity: 0.3;
+    }
+    .no-bgImg {
+        background-image: none !important;
+    }
+    .selfPhoto {
+        position: absolute;
+        left: .5rem;
+        bottom: .4rem;
+        font-size: 1rem;
+        img {
+            position: relative;
+            margin: 0 .4rem;
+            left: 0;
+            top: 0;
+            max-height: 2rem;
+            vertical-align: middle;
+        }
+        div {
+            float: right;
+        }
+    }
+}

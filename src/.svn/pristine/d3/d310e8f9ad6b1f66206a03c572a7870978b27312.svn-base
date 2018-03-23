@@ -1,0 +1,30 @@
+header-step {
+  .step-bar {
+    background-image: url(../assets/imgs/check.png);
+    background-position: 1.6rem center;
+    background-repeat: no-repeat;
+    background-size: 9rem 7rem;
+    padding: 1rem 1.2rem;
+    text-align: right;
+    label {
+      display: inline-block;
+      width: .8rem;
+      margin: .8rem;
+      color: #dee8fe;
+    }
+  }
+  .column {
+    display: inline-block;
+    height: 3.2rem;
+    width: .6rem;
+    background-color: #dcdddf;
+  }
+  .current {
+    span {
+      color: #333;
+    }
+    .column {
+      background-color: #f9d228;
+    }
+  }
+}

@@ -1,0 +1,98 @@
+page-page4 {
+  ion-content {
+    text-align: center;
+    .bank {
+      text-align: center;
+      border: 1px solid #EEE;
+      height: 3.6rem;
+      border-radius: .5rem;
+      margin-top: .6rem;
+      vertical-align: top;
+      outline:none;
+    }
+    .bankNo {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+      width: 30%;
+      //margin-right: 2%;
+    }
+    .bankCount {
+      width: 50%;
+      margin-left: 2%;
+    }
+    .pull-down-icon {
+      margin-right:2%;
+      display: inline-block;
+      width:10%;
+      line-height:3.6rem;
+      background-color: #eee;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+    .line-icon {
+      display: inline-block;
+      height:3.6rem;
+      line-height: 3.6rem;
+      margin-top: .6rem;
+      vertical-align: middle;
+    }
+    .relativeList {
+      display: -webkit-box;
+    }
+    .break-word {
+      width: 80%;
+      white-space: normal;
+      word-wrap: break-word;
+    }
+    .noted {
+      .t12 {
+        margin-top: 12px;
+      }
+      p {
+        text-align: left;
+      }
+    }
+    .declaration-item {
+      ion-label {
+        display: flex;
+      }
+      input {
+        width: 6%;
+        margin-top: 0.35rem;
+      }
+      label {
+        flex: 1;
+      }
+    }
+  }
+  .show-bank {
+    padding: .8rem 0 0;
+    text-align: left;
+    color:#000;
+    font-size: 12px;
+  }
+  ion-label {
+    max-width: 100% !important;
+    white-space: inherit;
+  }
+
+  .item-block {
+    min-height: 0rem;
+  }
+  .cut-line {
+    width:32%;
+    display: inline-block;
+  }
+  .companyAddr {
+    padding-top:.5rem;
+    padding-left: 16px;
+    font-size: 1.3rem;
+    text-align: left;
+  }
+  .comAddressNote {
+    font-size: 12px;
+    text-align: left;
+    padding-left: 16px;
+    padding-top: 10px;
+  }
+}

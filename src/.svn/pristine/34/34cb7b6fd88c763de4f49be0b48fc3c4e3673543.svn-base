@@ -1,0 +1,16 @@
+<div class="form-item">
+    <div class="show-err" *ngIf="errMsg" @fadeIn (click)="errMsg = ''">{{errMsg}}</div>
+
+    <span *ngIf="isFocus && isMobile" class="mobile-code">（852）</span>
+    <ion-item [ngClass]="{'has-err': errMsg, 'isMobile': isFocus && isMobile}" *ngIf="!opItem">
+        <ion-label floating>{{name}}</ion-label>
+        <ion-input  [(ngModel)]="inputValue" (ionFocus)="isShowMobile(true)" (ionBlur)="isShowMobile(false)" [type]="inputType" (click)="errMsg = ''" [maxlength]="maxLen" [disabled]="isDisabled" (input)="keyUp($event)"></ion-input>
+    </ion-item>
+
+    <ion-item [ngClass]="{'has-err': errMsg}" *ngIf="opItem"> 
+        <ion-label floating>{{name}}</ion-label>
+        <ion-select [(ngModel)]="inputValue" cancelText="取消" okText="確定" (click)="errMsg = ''" [disabled]="isDisabled" (ionChange)="changeValue()">
+            <ion-option *ngFor="let item of opItem" [value]="item.value">{{item['name' + userType]}}</ion-option>
+        </ion-select>
+    </ion-item>
+</div>

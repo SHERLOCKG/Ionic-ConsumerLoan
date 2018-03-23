@@ -1,0 +1,18 @@
+{
+    "status":"success",
+    "message":"",
+    "errCode":"",
+    "resultInfo": {
+        "loanPurpose": [
+            {"nameTC": "納稅", "nameEN": "Tax Payment", "value": "1"},
+            {"nameTC": "裝修", "nameEN": "Decoration", "value": "2"},
+            {"nameTC": "旅遊", "nameEN": "Travel", "value": "3"},
+            {"nameTC": "進修", "nameEN": "Education", "value": "4"},
+            {"nameTC": "結婚", "nameEN": "Marriage", "value": "5"},
+            {"nameTC": "醫療費用", "nameEN": "Medical", "value": "6"},
+            {"nameTC": "償還債務", "nameEN": "Debt", "value": "7"},
+            {"nameTC": "私人用途", "nameEN": "Personal Use", "value": "8"}
+        ]
+    }
+  }
+  

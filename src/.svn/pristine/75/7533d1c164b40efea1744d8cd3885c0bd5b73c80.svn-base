@@ -1,0 +1,9 @@
+<ion-header color="bea">
+  <ion-navbar class="bea-header" ></ion-navbar>
+</ion-header>
+
+<ion-content padding>
+    <h3>抱歉</h3>
+    <p class="err-msg" *ngIf="!errMsg">我們暫時未能處理你的指示。如有查詢，請致電私人貸款申請熱線 <a href="tel:21861515">21861515</a>。</p>
+    <p class="err-msg" *ngIf="errMsg">{{ errMsg }}</p>
+</ion-content>

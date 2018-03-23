@@ -1,0 +1,43 @@
+page-pdf {
+  .back-icon {
+    font-size: 2.4rem;
+    color: #ccc;
+    padding: 0 .8rem;
+    vertical-align: middle;
+  }
+  width: 100%;
+  height: 100%;
+  ion-scroll {
+    width: 100%;
+    height: 100%;
+    text-align: left;
+    white-space: nowrap;
+
+    .scroll-zoom-wrapper {
+      width: 100%;
+      height: 100%;
+    }
+
+    .image {
+      display: inline-block;
+      position: relative;
+      min-width: 100%;
+      min-height: 100%;
+
+      transform-origin: left top;
+
+      background-repeat: no-repeat;
+      background-position: center center;
+      background-size: contain;
+
+      #the-canvas {
+        pointer-events: none;
+        max-width: none;
+        min-width: none;
+        transform-origin: left top;
+        position: absolute;
+        width: 100%;
+      }
+    }
+  }
+}

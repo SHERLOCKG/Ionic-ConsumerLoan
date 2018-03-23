@@ -1,0 +1,13 @@
+{
+    "status":"success",
+    "message":"",
+    "errCode":"",
+    "systemTime": "2017-08-02",
+    "resultInfo":{
+        "dataInfo": [
+            { "loanAmount": 380000, "mir": 0.01, "refundTime": 12, "apr": 0.0436, "handleCharge": 3000, "repayAmount": 60000 }
+          ],
+        "refNo": "CL1NVAB0KA57",
+        "resultCode": "cln_0004"
+    }
+  }

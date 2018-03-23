@@ -1,0 +1,127 @@
+<ion-header *ngIf="commonService.isWebset">
+  <ion-navbar class="bea-header"></ion-navbar>
+</ion-header>
+
+<ion-content>
+  <header-step [step]=3></header-step>
+  <ion-list>
+    <ion-list-header>職業</ion-list-header>
+    <form-item #occupationType [name]="'工作類型：'" (changeBack)="typeChange()" [errMsg]="errObj.occupationType" id="occupationType" [opItem]="occupationTypeItems"></form-item>
+    
+    <div [style.display]="!httpService.isHomeWork ? 'block' : 'none'">
+        <form-item #companyEnName [name]="'受僱公司英文名稱：'" [errMsg]="errObj.companyEnName" id="companyEnName" [maxLen]=50 [keyFilter]="validaService.regExp.forCompany"></form-item>
+        <div class="companyAddr">公司英文地址（郵政信箱及海外地址恕不接受）：</div>
+        <form-item #companyFlat [name]="'室：'" [errMsg]="errObj.companyFlat" class="cut-line" [maxLen]=10 id="companyFlat" [keyFilter]="validaService.regExp.forRoom"></form-item>
+        <form-item #companyFloor [name]="'樓：'" [errMsg]="errObj.companyFloor" class="cut-line" [maxLen]=10 id="companyFloor" [keyFilter]="validaService.regExp.forRoom"></form-item>
+        <form-item #companyBlock [name]="'座：'" [errMsg]="errObj.companyBlock" class="cut-line" [maxLen]=10 id="companyBlock" [keyFilter]="validaService.regExp.forRoom"></form-item>
+        <form-item #companyGarden [name]="'大廈/屋苑：'" [errMsg]="errObj.companyGarden" [maxLen]=35 id="companyGarden" [keyFilter]="validaService.regExp.forArea"></form-item>
+        <form-item #companyStreet [name]="'街道：'" [errMsg]="errObj.companyStreet" [maxLen]=35 id="companyStreet" [keyFilter]="validaService.regExp.forArea"></form-item>
+    
+        <div class="form-item" id="companyArea">
+          <div class="show-err" style="bottom: 50px;" *ngIf="errObj.companyArea" (click)="errObj.companyArea = ''" @fadeIn>{{errObj.companyArea}}</div>
+          <ion-item #companyArea style="border-bottom:1px solid #c8c7cc;height: 72px;" class="area-border" id="companyArea">
+              <ion-label>地區：</ion-label>
+              <ion-multi-picker
+                  (click)="errObj.companyArea=''"
+                  item-content
+                  id="companyArea"
+                  [(ngModel)]="companyArea.inputValue"
+                  [multiPickerColumns]="companyAreaList"
+                  [cancelText]="'取消'"
+                  [doneText]="'確定'"
+              >
+              </ion-multi-picker>
+          </ion-item>
+      </div>
+      <form-item #industryNature [name]="'行業性質：'" (changeBack)="industryChange()" [errMsg]="errObj.industryNature" id="industryNature" [opItem]="industryNatureItems"></form-item>
+      
+      <form-item *ngIf="otherIndustry" #industry [name]="'註明行業性質：'" [errMsg]="errObj.industry" id="industry" [maxLen]=50 [keyFilter]="validaService.regExp.forCompany"></form-item>
+      <form-item #occupation [name]="'職位：'" (changeBack)="positionChange()" [errMsg]="errObj.occupation" id="occupation" [opItem]="occupationItems"></form-item>
+      
+      <form-item *ngIf="otherPosition" #position [name]="'註明職位：'" [errMsg]="errObj.position" id="position" [maxLen]=50 [keyFilter]="validaService.regExp.forCompany"></form-item>
+      <form-item #income [name]="'每月收入：'" [maxLen]=10 [errMsg]="errObj.income" id="income" [inputType]="'tel'"></form-item>
+      <!--<form-item #tenureYear [name]="'任職年期：'" [errMsg]="errObj.tenureYear" id="tenureYear" [inputType]="'tel'" maxLen=2 [keyFilter]="validaService.regExp.forNum"></form-item>-->
+      
+      <div class="form-item" id="tenureYear">
+        <div class="show-err" style="bottom: 40px;" *ngIf="errObj.tenureYear" (click)="errObj.tenureYear = ''" @fadeIn>{{errObj.tenureYear}}</div>
+        <ion-item #tenureYear style="border-bottom:1px solid #c8c7cc" class="area-border" id="tenureYear">
+          <ion-label>任職年期：</ion-label>
+          <ion-multi-picker
+            (click)="errObj.tenureYear=''"
+            (ionChange)="servingYearChange()"
+            item-content
+            id="tenureYear"
+            [(ngModel)]="tenureYear.inputValue"
+            [multiPickerColumns]="yearList"
+            [cancelText]="'取消'"
+            [doneText]="'確定'"
+          >
+          </ion-multi-picker>
+        </ion-item>
+      </div>
+      
+      <form-item #companyMobileNo [name]="'公司電話號碼：'" [maxLen]=8 [errMsg]="errObj.companyMobileNo" id="companyMobileNo" [inputType]="'tel'" [keyFilter]="validaService.regExp.forNum"></form-item>
+      <div [style.display]= "servingYear < 3 ? 'block' : 'none'">
+        <form-item #formerCompanyEnName [name]="'前受僱公司英文名稱：'" [maxLen]=50 [errMsg]="errObj.formerCompanyEnName" id="formerCompanyEnName" [keyFilter]="validaService.regExp.forCompany"></form-item>
+        <!--<form-item #formerTenureYear [name]="'前受僱公司任職年期：'" [errMsg]="errObj.formerTenureYear" id="formerTenureYear" [inputType]="'tel'" maxLen=2 [keyFilter]="validaService.regExp.forNum"></form-item>-->
+        <div class="form-item" id="formerTenureYear">
+          <div class="show-err" style="bottom: 40px;" *ngIf="errObj.formerTenureYear" (click)="errObj.formerTenureYear = ''" @fadeIn>{{errObj.formerTenureYear}}</div>
+          <ion-item #formerTenureYear style="border-bottom:1px solid #c8c7cc" class="area-border" id="formerTenureYear">
+            <ion-label>前任職年期：</ion-label>
+            <ion-multi-picker
+              (click)="errObj.formerTenureYear=''"
+              item-content
+              id="formerTenureYear"
+              [(ngModel)]="formerTenureYear.inputValue"
+              [multiPickerColumns]="yearList"
+              [cancelText]="'取消'"
+              [doneText]="'確定'"
+            >
+            </ion-multi-picker>
+          </ion-item>
+        </div>
+      </div>
+    </div>
+  </ion-list>
+
+  <ion-list>
+    <ion-list-header>通訊地址（郵政信箱及海外地址恕不接受）</ion-list-header>
+    <form-item #comAddress [name]="'請將本人的通訊地址設定為：'" [errMsg]="errObj.comAddress" id="comAddress" [opItem]="comAddressItems"></form-item>
+    <!--<div class="comAddressNote">如沒有指明，住宅地址將被設定為閣下所有信用卡賬戶、分期貸款賬戶及循環貸款賬戶（如有）的指定通訊地址。</div>-->
+  </ion-list>
+  
+  <ion-list>
+    <div id="bankNo"></div>
+    <div id="accountNo"></div>
+    <ion-list-header>提取貸款/每月還款之直接付款授權書</ion-list-header>
+    <ion-item>
+      <p class="f12 color-b">私人貸款（「貸款」）申請一經批核，本人不可撤銷地要求及授權東亞銀行有限公司（「東亞銀行」）將所批核的貸款額存本人下述指定之港元往來/儲蓄賬戶（「指定賬戶」）。本人並要求授權東亞銀行可不時從指定賬戶中扣除貸款之每月供款及全部尚欠之款項（包括但不限於本金、利息、收費及支出），而東亞銀行亦具絕對權力將每月還款額分配為本金、利息、收費及支出：</p>
+      <div class="form-item">
+        <div class="show-err" *ngIf="errObj.bankNo" (click)="errObj.bankNo=''">{{errObj.bankNo}}</div>
+        <div class="show-err" *ngIf="errObj.accountNo" (click)="errObj.accountNo=''" style="left: 50%;">{{errObj.accountNo}}</div>
+        <input class="bank bankNo" type="tel" placeholder="銀行編號" (focus)="errObj.bankNo=''" [(ngModel)]="bankNo" maxlength="3" (input)="getBankByCode()"><span class="bank pull-down-icon" (click)="chooseBankCode.open()"><ion-icon name="arrow-down"></ion-icon></span>
+        <!--<ion-icon name="ios-information-circle-outline" (click)="getBankName()" style="font-size: 2.2rem;vertical-align: middle;"></ion-icon>-->
+        <span class="line-icon">-</span>
+        <input class="bank bankCount" type="tel" placeholder="賬戶號碼" (focus)="errObj.accountNo=''" [(ngModel)]="accountNo" maxlength="12">
+      </div>
+      <p *ngIf="bankName" class="show-bank">銀行名稱：{{bankName}}</p>
+    </ion-item>
+    <ion-item style="display: none">
+      <ion-label>選擇銀行編號</ion-label>
+      <ion-select #chooseBankCode [(ngModel)]="bankNo" okText="確定" cancelText="取消" (ionChange)="getBankByCode()">
+        <ion-option *ngFor="let item of bankAry" [value]="item.key">{{item.key}}&nbsp;&nbsp;{{ item.name_cn }}</ion-option>
+      </ion-select>
+    </ion-item>
+    <div class="form-item" id="isAgreeArrange">
+      <div class="show-err" style="bottom: 55px;" *ngIf="errObj.isAgreeArrange" (click)="errObj.isAgreeArrange = ''" @fadeIn>{{errObj.isAgreeArrange}}</div>
+      <ion-item id="isAgreeArrange">
+      <p class="f12 color-b">
+        <input style="vertical-align: middle" type="checkbox" [(ngModel)]="isAgreeArrange" (click) = "errObj.isAgreeArrange = ''" />
+        關於上述付款授權書之安排，本人已參閱、明白及同意各項<a href="javascript:;" class="underline font-blue" (click)="toPDF('tnc');$event.stopPropagation()">條款及細則</a>。
+      </p>
+      </ion-item>
+    </div>
+  </ion-list>
+
+  <button ion-button class="my-btn" (click)="nextStep()">儲存及下一步</button>
+</ion-content>

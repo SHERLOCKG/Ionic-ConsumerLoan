@@ -1,0 +1,269 @@
+<ion-header *ngIf="commonService.isWebset">
+  <ion-navbar class="bea-header"></ion-navbar>
+</ion-header>
+
+<div class="elect-sign"  [style.display]="canvasObject.isSign">
+    <ion-icon name="close" class="sign-close" (click)="canvasObject.isSign = 'none'"></ion-icon>
+    <canvas id="canvas" width="300" height="300"></canvas>
+    <div>
+      <button ion-button (click)="signReset()" class="sign-btn">重置</button>
+      <button ion-button (click)="signSave()" class="sign-btn">保存</button>
+    </div>
+  </div>
+
+<ion-content>
+  <header-step [step]=5></header-step>
+
+  <ion-list>
+    <ion-list-header>
+      貸款資料
+    <!--<button class="btn-change" ion-button  item-end (click)="goBack(0)"></button>-->
+    </ion-list-header>
+    <ion-item>
+      擬申請之貸款金額：{{ confirmInfo.loanAmount }}
+    </ion-item>
+    <ion-item>
+      還款期：{{ confirmInfo.refundTime }}個月
+    </ion-item>
+    <ion-item>
+      貸款目的：{{ confirmInfo.loanPurpose }}
+    </ion-item>
+    <ion-item>
+      每月平息：{{ (confirmInfo.mir * 100).toFixed(3) }}%
+    </ion-item>
+    <ion-item>
+      實際年利率：{{ (confirmInfo.apr * 100).toFixed(3) }}%
+    </ion-item>
+    <ion-item>
+      每月還款額：{{ commonService.moneyFormat(confirmInfo.monthPay) }}
+    </ion-item>
+  </ion-list>
+
+  <ion-list >
+    <ion-list-header>
+      個人資料
+    <button class="btn-change" ion-button  item-end (click)="goBack(2)"><ion-icon name="md-create" class="edit-btn"></ion-icon></button>
+    </ion-list-header>
+    <ion-item>
+      稱謂：{{ confirmInfo.gender }}
+    </ion-item>
+    <ion-item>
+      英文姓氏：{{ confirmInfo.surName }}
+    </ion-item>
+    <ion-item>
+      英文名字：{{ confirmInfo.name }}
+    </ion-item>
+    <ion-item>
+      出生日期：{{ confirmInfo.fullBirthday }}
+    </ion-item>
+    <ion-item>
+      香港身份證號碼：{{ confirmInfo.idCardPref }}{{ confirmInfo.idCardSuf }}
+    </ion-item>
+    <ion-item *ngIf="!httpService.isHK">
+      其他身份證明文件類別：{{ confirmInfo.otherType }}
+    </ion-item>
+    <ion-item *ngIf="!httpService.isHK">
+      其他護照簽證國家：{{ confirmInfo.otherCountry }}
+    </ion-item>
+    <ion-item *ngIf="!httpService.isHK">
+      其他身份證明文件號碼：{{ confirmInfo.otherNum }}
+    </ion-item>
+    <ion-item>
+      手提電話：{{ confirmInfo.mobileNo }}
+    </ion-item>
+    <ion-item>
+      住宅電話：{{ confirmInfo.houseMobileNo }}
+    </ion-item>
+    <ion-item>
+      國籍：{{ confirmInfo.nationality }}
+    </ion-item>
+    <ion-item>
+      婚姻狀況：{{ confirmInfo.marriage }}
+    </ion-item>
+    <ion-item>
+      教育程度：{{ confirmInfo.education }}
+    </ion-item>
+    <ion-item>
+      居住狀況：{{ liveStatus }}
+    </ion-item>
+    <ion-item *ngIf="confirmInfo.liveCost">
+      申請人負責之每月<span *ngIf="confirmInfo.liveStatus == 'Rented'">租金</span><span *ngIf="confirmInfo.liveStatus == 'Mortgaged'">供款</span>(港幣)：{{ confirmInfo.liveCost }}
+    </ion-item>
+  </ion-list>
+
+  <ion-list>
+    <ion-list-header>
+      住宅英文地址
+      <button class="btn-change" ion-button  item-end (click)="goBack(2)"><ion-icon name="md-create" class="edit-btn"></ion-icon></button>
+    </ion-list-header>
+    <ion-item class="cut-line">
+      室：{{ confirmInfo.flat }}
+    </ion-item>
+
+    <ion-item class="cut-line">
+      樓：{{ confirmInfo.floor }}
+    </ion-item>
+    
+    <ion-item class="cut-line">
+      座：{{ confirmInfo.block }}
+    </ion-item>
+
+    <ion-item>
+      大廈/屋苑：{{ confirmInfo.garden }}
+    </ion-item>
+
+    <ion-item>
+      街道：{{ confirmInfo.street }}
+    </ion-item>
+
+    <ion-item>
+      地區：{{ confirmInfo.area }}
+    </ion-item>
+
+    <ion-item>
+      居住年期：{{ getLiveYear(confirmInfo.liveYear) }}
+    </ion-item>
+  </ion-list>
+
+  <ion-list *ngIf="!httpService.isHomeWork">
+    <ion-list-header>
+      職業
+      <button class="btn-change" ion-button  item-end (click)="goBack(3)"><ion-icon name="md-create" class="edit-btn"></ion-icon></button>
+    </ion-list-header>
+    <ion-item>
+      受僱公司英文名稱：{{ confirmInfo.companyEnName }}
+    </ion-item>
+
+    <ion-item class="cut-line">
+      室：{{ confirmInfo.companyFlat }}
+    </ion-item>
+
+    <ion-item class="cut-line">
+      樓：{{ confirmInfo.companyFloor }}
+    </ion-item>
+
+    <ion-item class="cut-line">
+      座：{{ confirmInfo.companyBlock }}
+    </ion-item>
+
+    <ion-item>
+      大廈/屋苑：{{ confirmInfo.companyGarden }}
+    </ion-item>
+
+    <ion-item>
+      街道：{{ confirmInfo.companyStreet }}
+    </ion-item>
+
+    <ion-item>
+      地區：{{ confirmInfo.companyArea }}
+    </ion-item>
+
+      <ion-item>
+        行業性質：{{ confirmInfo.otherIndustry ? confirmInfo.otherIndustry : confirmInfo.industryNature }}
+      </ion-item>
+      
+      <ion-item>
+        職位：{{ confirmInfo.otherOccupation ? confirmInfo.otherOccupation : confirmInfo.occupation }}
+      </ion-item>
+
+      <ion-item>
+        每月收入：{{ confirmInfo.income }}
+      </ion-item>
+
+      <ion-item>
+        任職年期：{{ getLiveYear(confirmInfo.tenureYear) }}
+      </ion-item>
+
+      <ion-item>
+        公司電話號碼：{{ confirmInfo.companyMobileNo }}
+      </ion-item>
+
+      <ion-item *ngIf="confirmInfo.formerTenureYear">
+        前受僱公司任職年期：{{ getLiveYear(confirmInfo.formerTenureYear) }}
+      </ion-item>
+  </ion-list>
+
+  <ion-list>
+      <ion-list-header>
+        通訊地址
+        <button class="btn-change" ion-button  item-end (click)="goBack(3)"><ion-icon name="md-create" class="edit-btn"></ion-icon></button>
+      </ion-list-header>
+      <ion-item>
+          通訊地址：{{ confirmInfo.comAddress == "Residential Address" ? "住宅地址" : "公司地址" }}
+      </ion-item>
+  </ion-list>
+
+  <ion-list>
+      <ion-list-header>
+          提取貸款/每月還款之賬戶
+        <button class="btn-change" ion-button  item-end (click)="goBack(3)"><ion-icon name="md-create" class="edit-btn"></ion-icon></button>
+      </ion-list-header>
+      <ion-item>
+          銀行名稱：{{ confirmInfo.bankName}}
+      </ion-item>
+      <ion-item>
+          賬戶號碼：{{ confirmInfo.bankNo}}-{{ confirmInfo.accountNo }}
+          <!-- formatBankNum(confirmInfo.accountNo) -->
+      </ion-item>
+  </ion-list>
+
+  <ion-list *ngIf="confirmInfo.isRelative">
+    <ion-list-header>
+      你有沒有親屬為東亞銀行之董事/僱員？
+      <button class="btn-change" ion-button  item-end (click)="goBack(4)"><ion-icon name="md-create" class="edit-btn"></ion-icon></button>
+    </ion-list-header>
+    <ion-item>
+      董事/僱員香港身份證上之英文姓名：{{ confirmInfo.relativeName }}
+    </ion-item>
+    <ion-item>
+      關係：{{ confirmInfo.relative }}
+    </ion-item>
+  </ion-list>
+
+  <ion-list>
+    <ion-list-header>
+      選擇拒絕在直接促銷中使用個人資料
+      <button class="btn-change" ion-button  item-end (click)="goBack(4)"><ion-icon name="md-create" class="edit-btn"></ion-icon></button>
+    </ion-list-header>
+    <ion-item>
+      <p class="f12 color-b">你<span class="underline">{{strIsAgree}}</span>{{promotionInfo}}</p>
+    </ion-item>
+  </ion-list>
+
+  <ion-list>
+    <ion-list-header>
+      提供詳細個人資料予第三者作直接促銷
+      <button class="btn-change" ion-button  item-end (click)="goBack(4)"><ion-icon name="md-create" class="edit-btn"></ion-icon></button>
+    </ion-list-header>
+    <ion-item id="isAgree">
+      <p class="f12 color-b">你<span class="underline">{{confirmInfo.useOther ? "不同意" : "同意"}}</span>本行提供你的個人資料予第三者作直接促銷。</p>
+    </ion-item> 
+  </ion-list>
+  
+  <ion-list>
+    <ion-list-header>聲明</ion-list-header>
+    <div class="form-item" id="isAgree" style="position: relative;">
+      <div class="show-err" *ngIf="errObj.isAgree" (click)="errObj.isAgree = ''" @fadeIn>{{errObj.isAgree}}</div>
+      <ion-item >
+        <input class="my-checkbox" id="checkbox" type="checkbox" [(ngModel)]="isAgree" style="vertical-align: middle;" (click)="errObj.isAgree = ''">
+        <label (click)="errObj.isAgree = ''" style="vertical-align: middle;" for="checkbox">本人已參閱、明白及同意各項<a href="javascript:;" class="underline font-blue" (click)="toPDF('dat');$event.stopPropagation()">聲明</a>及<a href="javascript:;" class="underline font-blue word-wrap" (click)="toPDF('tnctln');$event.stopPropagation()">條款細則</a>。</label>
+      </ion-item>
+    </div>
+  </ion-list>
+  
+  <ion-list>
+    <ion-list-header>電子簽名</ion-list-header>
+    <div class="form-item" id="isSign">
+      <div class="show-err" style="bottom: 0px;" *ngIf="errObj.isSign" (click)="errObj.isSign = ''" @fadeIn>{{errObj.isSign}}</div>
+    </div>
+    <ion-item class="last-text">
+      <button ion-button class="btn-change" (click)="showSignBox()">請按此即刻簽名</button>
+      <img *ngIf="canvasObject.signCanvas && canvasObject.isDraw && canvasObject.isSign == 'none'" [src]="canvasObject.signCanvas" alt="電子簽名">
+      <p>本人已同意於此電子申請表內記錄的電子簽署與本人於書面記錄的人手簽署具有相同效力。</p>
+    </ion-item>
+  </ion-list>
+
+  <div class="fixed-btn">
+    <button ion-button class="my-btn" (click)="saveAnext()">確認及傳送</button>
+  </div>
+</ion-content>
